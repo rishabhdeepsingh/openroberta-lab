@@ -1,6 +1,7 @@
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
+        //extendStatics = Object.setPrototypeOf || //So war es von Professor Bruer
+        extendStatics = Object.getPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b)
                 if (b.hasOwnProperty(p))
@@ -16,7 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 var driveConfig = {
     "motorL": { "port": 1, "orientation": -1 },
     "motorR": { "port": 2, "orientation": -1 },
-    "wheelDiameter": 5.5, "trackWidth": 22.8
+    "wheelDiameter": 5.6, "trackWidth": 22.8
 };
 var propFromORB = {
     "Motor": [{ "pwr": 0, "speed": 0, "pos": 0 },
@@ -45,6 +46,7 @@ var cmdConfigToORB = {
             { "tics": 72, "acc": 50, "Kp": 50, "Ki": 30 }]
     }
 };
+var isMotorConfug = false;
 var cmdPropToORB = {
     "target": "orb",
     "type": "data",
@@ -75,6 +77,43 @@ function getSensorValue(id) {
     }
     return (0);
 }
+function getSensorValueColor(id) {
+    id = id - 1;
+    if (0 <= id && id < 4) {
+        if (propFromORB.Sensor[id].value == 0) {
+            return ("No Color");
+        }
+        if (propFromORB.Sensor[id].value == 1) {
+            return ("Black");
+        }
+        if (propFromORB.Sensor[id].value == 2) {
+            return ("Blue");
+        }
+        if (propFromORB.Sensor[id].value == 3) {
+            return ("Green");
+        }
+        if (propFromORB.Sensor[id].value == 4) {
+            return ("Yellow");
+        }
+        if (propFromORB.Sensor[id].value == 5) {
+            return ("Red");
+        }
+        if (propFromORB.Sensor[id].value == 6) {
+            return ("White");
+        }
+        if (propFromORB.Sensor[id].value == 7) {
+            return ("Brown");
+        }
+    }
+    return (0);
+}
+function getSensorValueUltrasonic(id) {
+    id = id - 1;
+    if (0 <= id && id < 4) {
+        return (propFromORB.Sensor[id].value / 10);
+    }
+    return (0);
+}
 function getSensorValueGyro(id) {
     id = id - 1;
     if (0 <= id && id < 4) {
@@ -90,14 +129,14 @@ function getSensorValueGyro(id) {
 }
 function getSensorAnalog(id, ch) {
     id = id - 1;
-    if (0 <= id && id < 4 && 0 <= cg && ch < 2) {
+    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {
         return (propFromORB.Sensor[id].analog[ch]);
     }
     return (0);
 }
 function getSensorDigital(id, ch) {
     id = id - 1;
-    if (0 <= id && id < 4 && 0 <= ch && ch < 2) { //erste ch = cg
+    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {
         return (propFromORB.Sensor[id].digital[ch]);
     }
     return (false);
@@ -150,6 +189,10 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             U.loggingEnabled(true, true);
             return _this;
         }
+        RobotOrbBehaviour.prototype.configMotor = function () {
+            this.btInterfaceFct(cmdConfigToORB);
+            isMotorConfug = true;
+        };
         RobotOrbBehaviour.prototype.setSpeed = function (speedL, speedR) {
             // Zuordnung Seite und Einbaurichtung fehlen
             var distanceToTics = 1000.0 / (driveConfig.wheelDiameter * Math.PI);
@@ -157,7 +200,17 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             speedR = distanceToTics * speedR;
             setMotor(driveConfig.motorL.port, 2, driveConfig.motorL.orientation * speedL, 0);
             setMotor(driveConfig.motorR.port, 2, driveConfig.motorR.orientation * speedR, 0);
-            this.btInterfaceFct(cmdConfigToORB);
+            //this.btInterfaceFct(cmdConfigToORB);
+            this.btInterfaceFct(cmdPropToORB);
+        };
+        RobotOrbBehaviour.prototype.setSpeedProcent = function (speedL, speedR) {
+            // Zuordnung Seite und Einbaurichtung fehlen
+            var distanceToTics = 1000.0 / (driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7 * (driveConfig.wheelDiameter * Math.PI);
+            speedL = ((speedL / 100) * maxspeed) * distanceToTics;
+            speedR = ((speedR / 100) * maxspeed) * distanceToTics;
+            setMotor(driveConfig.motorL.port, 2, driveConfig.motorL.orientation * speedL, 0);
+            setMotor(driveConfig.motorR.port, 2, driveConfig.motorR.orientation * speedR, 0);
             this.btInterfaceFct(cmdPropToORB);
         };
         RobotOrbBehaviour.prototype.calcTimeToGo = function (speed, distance) {
@@ -165,6 +218,42 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if (speed != 0)
                 t += 1000.0 * Math.abs(distance / speed);
             return (t);
+        };
+        RobotOrbBehaviour.prototype.setMoveToProcent = function (speedL, speedR, deltaL, deltaR) {
+            // Zuordnung Seite und Einbaurichtung fehlen
+            var distanceToTics = 1000.0 / (driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7 * (driveConfig.wheelDiameter * Math.PI);
+            deltaL *= distanceToTics;
+            deltaR *= distanceToTics;
+            speedL = Math.abs(((speedL / 100) * maxspeed) * distanceToTics);
+            speedR = Math.abs(((speedR / 100) * maxspeed) * distanceToTics);
+            var targetL = getMotorPos(driveConfig.motorL.port) + driveConfig.motorL.orientation * deltaL;
+            var targetR = getMotorPos(driveConfig.motorR.port) + driveConfig.motorR.orientation * deltaR;
+            var timeToGoL = this.calcTimeToGo(speedL, deltaL);
+            var timeToGoR = this.calcTimeToGo(speedR, deltaR);
+            setMotor(driveConfig.motorL.port, 3, speedL, targetL);
+            setMotor(driveConfig.motorR.port, 3, speedR, targetR);
+            //this.btInterfaceFct(cmdConfigToORB);
+            this.btInterfaceFct(cmdPropToORB);
+            return (Math.max(timeToGoL, timeToGoR));
+        };
+        RobotOrbBehaviour.prototype.setSpeedMotorOnProcent = function (port, speed, duration) {
+            var distanceToTics = 1000.0 / (driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7 * (driveConfig.wheelDiameter * Math.PI);
+            speed = ((speed / 100) * maxspeed) * distanceToTics;
+            setMotor(port, 2, driveConfig.motorL.orientation * speed, duration);
+            this.btInterfaceFct(cmdPropToORB);
+        };
+        RobotOrbBehaviour.prototype.setMoveToMotorOnProcent = function (port, speed, delta) {
+            var distanceToTics = 1000.0 / (driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7 * (driveConfig.wheelDiameter * Math.PI);
+            delta *= distanceToTics;
+            speed = Math.abs(((speed / 100) * maxspeed) * distanceToTics);
+            var target = getMotorPos(port) + driveConfig.motorL.orientation * delta;
+            var timeToGo = this.calcTimeToGo(speed, delta);
+            setMotor(port, 3, speed, target);
+            this.btInterfaceFct(cmdPropToORB);
+            return timeToGo;
         };
         RobotOrbBehaviour.prototype.setMoveTo = function (speedL, speedR, deltaL, deltaR) {
             // Zuordnung Seite und Einbaurichtung fehlen
@@ -179,7 +268,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             var timeToGoR = this.calcTimeToGo(speedR, deltaR);
             setMotor(driveConfig.motorL.port, 3, speedL, targetL);
             setMotor(driveConfig.motorR.port, 3, speedR, targetR);
-            this.btInterfaceFct(cmdConfigToORB);
+            //this.btInterfaceFct(cmdConfigToORB);
             this.btInterfaceFct(cmdPropToORB);
             return (Math.max(timeToGoL, timeToGoR));
         };
@@ -281,10 +370,11 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             configSensor(port, 1, 0, 0);
             if (sensor == "ultrasonic") {
                 cmdConfigToORB.configToORB.Sensor[port - 1].type = 1;
-                if (slot == "distance") { //dis in mm,
+                if (slot == "distance") {
                     configSensor(port, 1, 0, 0);
-                    this.btInterfaceFct(cmdConfigToORB); //ist zu schnell, schon besser
-                    s.push(getSensorValue(port));
+                    this.btInterfaceFct(cmdConfigToORB);
+                    //s.push(getSensorValue(port));
+                    s.push(getSensorValueUltrasonic(port));
                 }
                 else if (slot == "presence") {
                     configSensor(port, 1, 2, 0);
@@ -296,7 +386,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (slot == "colour") {
                     configSensor(port, 1, 2, 0);
                     this.btInterfaceFct(cmdConfigToORB);
-                    s.push(getSensorValue(port));
+                    s.push(getSensorValueColor(port));
                 }
                 if (slot == "light") {
                     configSensor(port, 1, 0, 0);
@@ -311,17 +401,13 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (slot == "rgb") {
                     configSensor(port, 1, 4, 0);
                     this.btInterfaceFct(cmdConfigToORB);
-                    s.push(getSensorValue(port));
+                    s.push(getSensorValueColor(port));
                 }
             }
             else if (sensor == "touch") {
-                configSensor(port, 3, 0, 0); //ALLES TESTEN
-                this.btInterfaceFct(cmdConfigToORB);
-                //s.push(getSensorAnalog(port,0));
-                //s.push(getSensorAnalog(port,1));
-                s.push(getSensorDigital(port, 0));
-                //s.push(getSensorDigital(port,1));//Sollte bei Zweiten Digital sein
-                //s.push(getSensorValue(port));
+                //NXT-Touch-Sensor
+                configSensor(port, 3, 0, 0);
+                s.push(getSensorAnalog(port, 0));
             }
             else if (sensor == "gyro") {
                 if (slot == "angle") {
@@ -330,7 +416,21 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                     s.push(getSensorValueGyro(port));
                 }
                 if (slot == "rate") {
-                    configSensor(port, 1, 1, 0);
+                    if ((cmdConfigToORB.configToORB.Sensor[port].type != 1) || (cmdConfigToORB.configToORB.Sensor[port].mode != 1)) { //Fuer alle Sensoren machen
+                        configSensor(port, 1, 1, 0);
+                        this.btInterfaceFct(cmdConfigToORB);
+                    }
+                    s.push(getSensorValueGyro(port));
+                }
+            }
+            else if (sensor == "infrared") {
+                if (slot == "distance") {
+                    configSensor(port, 1, 0, 0);
+                    this.btInterfaceFct(cmdConfigToORB);
+                    s.push(getSensorValue(port));
+                }
+                if (slot == "presence") {
+                    configSensor(port, 1, 2, 0);
                     this.btInterfaceFct(cmdConfigToORB);
                     s.push(getSensorValue(port));
                 }
@@ -441,18 +541,24 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         };
         RobotOrbBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
             U.debug('motorOnAction' + ' port:' + port + ' duration:' + duration + ' speed:' + speed);
-            var gradToTics = 1000.0 / 360.0; //Speed Problem wahsheinlich hier, sollte 30*10 sein, testen
+            var gradToTics = 1000.0 / 360.0;
             var timeToGo = 0;
-            if (duration === undefined) { // SPEED mode
-                setMotor(port, 2, gradToTics * speed, 0);
+            if (isMotorConfug == false) {
+                this.btInterfaceFct(cmdConfigToORB);
+                isMotorConfug = true;
             }
-            else {
-                setMotor(port, 3, gradToTics * speed, getMotorPos(port) + gradToTics * duration);
-                timeToGo = this.calcTimeToGo(speed, duration);
+            if (duration === undefined) {
+                //setMotor( port, 2, gradToTics*speed, 0 );
+                this.setSpeedMotorOnProcent(port, speed, 0);
             }
-            this.btInterfaceFct(cmdConfigToORB);
-            this.btInterfaceFct(cmdPropToORB);
-            return timeToGo;
+            else { /* Es Funktioniert nicht richtig jetzt :(  */
+                return (this.setMoveToMotorOnProcent(port, speed, duration));
+                //setMotor( port, 3,speed, getMotorPos(port) + gradToTics*duration );
+                //timeToGo = this.calcTimeToGo(speed, duration);
+            }
+            //this.btInterfaceFct(cmdConfigToORB);
+            //this.btInterfaceFct(cmdPropToORB);
+            return 0;
         };
         RobotOrbBehaviour.prototype.motorStopAction = function (name, port) {
             U.debug('motorStopAction' + ' port:' + port);
@@ -462,30 +568,39 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         };
         RobotOrbBehaviour.prototype.driveAction = function (name, direction, speed, distance) {
             U.debug('driveAction' + ' direction:' + direction + ' speed:' + speed + ' distance:' + distance);
+            if (isMotorConfug == false) {
+                this.btInterfaceFct(cmdConfigToORB);
+                isMotorConfug = true;
+            }
             if ((direction == C.BACKWARD) || (direction == "BACKWARD")) {
                 speed *= -1;
             }
-            if (distance === undefined) { // SPEED mode
-                this.setSpeed(speed, speed);
-                return 0;
+            if (distance === undefined) {
+                //this.setSpeed(speed, speed);
+                this.setSpeedProcent(speed, speed);
             }
             else { // MOVE_TO mode
                 if (speed < 0) {
                     distance *= -1;
                 }
-                return (this.setMoveTo(speed, speed, distance, distance));
-                //return (this.setMoveToDriveFor(speed, speed, distance, distance));
+                //return( this.setMoveTo(speed, speed, distance, distance ));
+                return (this.setMoveToProcent(speed, speed, distance, distance));
             }
             return 0;
         };
         RobotOrbBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance) {
             U.debug('curveAction' + ' direction:' + direction + ' speedL:' + speedL + ' speedR:' + speedR + ' distance:' + distance);
+            if (isMotorConfug == false) {
+                this.btInterfaceFct(cmdConfigToORB);
+                isMotorConfug = true;
+            }
             if ((direction == C.BACKWARD) || (direction == "BACKWARD")) {
                 speedL *= -1;
                 speedR *= -1;
             }
             if (distance === undefined) { // SPEED mode
-                this.setSpeed(speedL, speedR);
+                //this.setSpeed(speedL, speedR);
+                this.setSpeedProcent(speedL, speedR); //Funktioniert  nicht
                 return 0;
             }
             else { // MOVE_TO mode
@@ -493,8 +608,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (speed > 0) {
                     var distL = speedL * distance / speed;
                     var distR = speedR * distance / speed;
-                    return (this.setMoveTo(speedL, speedR, distL, distR));
-                    //return (this.setMoveToDriveFor(speedL, speedR, distL, distR));
+                    //return( this.setMoveTo(speedL,speedR, distL, distR ));
+                    return (this.setMoveToProcent(speedL, speedR, distL, distR));
                 }
             }
             this.setSpeed(0, 0);
@@ -502,11 +617,16 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         };
         RobotOrbBehaviour.prototype.turnAction = function (name, direction, speed, angle) {
             U.debug('turnAction' + ' direction:' + direction + ' speed:' + speed + ' angle:' + angle);
+            if (isMotorConfug == false) {
+                this.btInterfaceFct(cmdConfigToORB);
+                isMotorConfug = true;
+            }
             if (direction == C.LEFT) {
                 speed *= -1;
             }
             if (angle === undefined) { // SPEED mode
-                this.setSpeed(speed, -speed);
+                //this.setSpeed(speed, -speed);
+                this.setSpeedProcent(speed, -speed);
                 return 0;
             }
             else { // MOVE_TO mode
@@ -514,8 +634,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                     angle *= -1;
                 }
                 var distance = angle * Math.PI / 360 * driveConfig.trackWidth;
-                return (this.setMoveTo(speed, speed, distance, -distance));
-                //return (this.setMoveToDriveFor(speed, speed, distance, -distance));
+                //return( this.setMoveTo(speed, speed, distance, -distance ));
+                return (this.setMoveToProcent(speed, speed, distance, -distance));
             }
             return 0;
         };

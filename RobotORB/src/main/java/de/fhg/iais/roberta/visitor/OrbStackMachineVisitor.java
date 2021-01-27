@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -54,27 +53,6 @@ public class OrbStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    /*
-     *     @Override
-    public V visitDriveAction(DriveAction<V> driveAction) {
-        driveAction.getParam().getSpeed().accept(this);
-        boolean speedOnly = !processOptionalDuration(driveAction.getParam().getDuration());
-        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
-        //IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
-        IDriveDirection leftMotorRotationDirection = DriveDirection.FOREWARD;
-        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
-        }
-        JSONObject o = mk(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "orb").put(C.SPEED_ONLY, speedOnly);
-        if ( speedOnly ) {
-            return app(o);
-        } else {
-            app(o);
-            return app(mk(C.STOP_DRIVE).put(C.NAME, "orb"));
-        }
-    }
-     */
     public V visitDriveAction(DriveAction<V> driveAction) {
         driveAction.getParam().getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(driveAction.getParam().getDuration());
@@ -194,13 +172,14 @@ public class OrbStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         return app(o);
     }
 
+    /*
     @Override
     public V visitCompassSensor(CompassSensor<V> compassSensor) {
         // TODO check if this is really supported!
         String mode = compassSensor.getMode();
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "orb");
         return app(o);
-    }
+    }*/
 
     @Override
     public V visitTouchSensor(TouchSensor<V> touchSensor) {
@@ -277,18 +256,6 @@ public class OrbStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = confSensor.getProperty("CONNECTOR");
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "orb");//war ev3, hab geändert
         return app(o);
-
-        /*
-        ConfigurationComponent confInfraredSensor = getConfigurationComponent(infraredSensor.getPort());
-        String brickName = confInfraredSensor.getProperty("VAR");
-        String port = confInfraredSensor.getProperty("CONNECTOR");
-        if ( brickName != null && port != null ) {
-            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.NAME, brickName).put(C.PORT, port);
-            return app(o);
-        } else {
-            throw new DbcException("No robot name or no port!");
-        }
-        */
     }
 
     @Override

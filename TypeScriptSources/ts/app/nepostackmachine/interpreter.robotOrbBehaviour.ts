@@ -88,6 +88,45 @@ function getSensorValue(id) {
     return (0);
 }
 
+function getSensorValueColor(id) {
+    id = id - 1;
+    if (0 <= id && id < 4) {
+        if(propFromORB.Sensor[id].value == 0){
+            return("No Color");
+        }
+        if(propFromORB.Sensor[id].value == 1){
+            return("Black");
+        }
+        if(propFromORB.Sensor[id].value == 2){
+            return("Blue");
+        }
+        if(propFromORB.Sensor[id].value == 3){
+            return("Green");
+        }
+        if(propFromORB.Sensor[id].value == 4){
+            return("Yellow");
+        }
+        if(propFromORB.Sensor[id].value == 5){
+            return("Red");
+        }
+        if(propFromORB.Sensor[id].value == 6){
+            return("White");
+        }
+        if(propFromORB.Sensor[id].value == 7){
+            return("Brown");
+        }
+    }
+    return (0);
+}
+
+function getSensorValueUltrasonic(id) {
+    id = id - 1;
+    if (0 <= id && id < 4) {
+        return (propFromORB.Sensor[id].value/10);
+    }
+    return (0);
+}
+
 function getSensorValueGyro(id) {
     id = id - 1;
     if (0 <= id && id < 4) {
@@ -104,7 +143,7 @@ function getSensorValueGyro(id) {
 
 function getSensorAnalog(id, ch) {
     id = id - 1;
-    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {//erste ch = cg
+    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {
         return (propFromORB.Sensor[id].analog[ch]);
     }
     return (0);
@@ -112,7 +151,7 @@ function getSensorAnalog(id, ch) {
 
 function getSensorDigital(id, ch) {
     id = id - 1;
-    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {//erste ch = cg
+    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {
         return (propFromORB.Sensor[id].digital[ch]);
     }
     return (false);
@@ -189,14 +228,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         }
 
         RobotOrbBehaviour.prototype.setSpeedProcent = function (speedL, speedR){
-            /*Diese Funktion berechnet Speed in Prozenten und nicht
-            in Umderehungen, ist abert ist zu erst nur in DriveBlock 
-            verwendet, es muss noch etwas präzisiert werden, damit die
-            in weiteren Blocken angwendet werden kann
-            */
             // Zuordnung Seite und Einbaurichtung fehlen
             var distanceToTics = 1000.0/(driveConfig.wheelDiameter * Math.PI);
-            var maxspeed = 2.6*(driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7*(driveConfig.wheelDiameter * Math.PI);
             speedL = ((speedL/100)*maxspeed)*distanceToTics;
             speedR = ((speedR/100)*maxspeed)*distanceToTics;
             setMotor(driveConfig.motorL.port, 2, driveConfig.motorL.orientation * speedL, 0);
@@ -214,14 +248,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         }
 
         RobotOrbBehaviour.prototype.setMoveToProcent = function ( speedL, speedR, deltaL, deltaR ){
-            /*Diese Funktion berechnet Speed in Prozenten und nicht
-            in Umderehungen, abert ist zu erst nur in DriveBlock 
-            verwendet, es muss noch etwas präzisiert werden, damit die
-            in weiteren Blocken angwendet werden kann
-            */
             // Zuordnung Seite und Einbaurichtung fehlen
             var distanceToTics = 1000.0/(driveConfig.wheelDiameter * Math.PI);
-            var maxspeed = 2.6*(driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7*(driveConfig.wheelDiameter * Math.PI);
             
             deltaL *= distanceToTics;
             deltaR *= distanceToTics;
@@ -243,11 +272,26 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
 
         RobotOrbBehaviour.prototype.setSpeedMotorOnProcent = function (port, speed, duration){
             var distanceToTics = 1000.0/(driveConfig.wheelDiameter * Math.PI);
-            var maxspeed = 2.6*(driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7*(driveConfig.wheelDiameter * Math.PI);
             speed = ((speed/100)*maxspeed)*distanceToTics;
             setMotor(port, 2, driveConfig.motorL.orientation * speed, duration);
             this.btInterfaceFct(cmdPropToORB);
         }
+
+        RobotOrbBehaviour.prototype.setMoveToMotorOnProcent = function (port, speed, delta ){
+            var distanceToTics = 1000.0/(driveConfig.wheelDiameter * Math.PI);
+            var maxspeed = 2.7*(driveConfig.wheelDiameter * Math.PI);
+            
+            delta *= distanceToTics;
+            speed = Math.abs(((speed/100)*maxspeed)*distanceToTics);
+            
+            var target =  getMotorPos(port) + driveConfig.motorL.orientation*delta; 
+            var timeToGo = this.calcTimeToGo(speed,delta);
+            
+            setMotor(port, 3, speed, target );
+            this.btInterfaceFct(cmdPropToORB);
+            return timeToGo;
+          }
   
 
         RobotOrbBehaviour.prototype.setMoveTo = function ( speedL, speedR, deltaL, deltaR ){
@@ -379,7 +423,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (slot == "distance"){
                     configSensor(port, 1, 0, 0);
                     this.btInterfaceFct(cmdConfigToORB);
-                    s.push(getSensorValue(port));
+                    //s.push(getSensorValue(port));
+                    s.push(getSensorValueUltrasonic(port));
                 }
                 else if (slot == "presence"){
                     configSensor(port, 1, 2, 0);
@@ -391,7 +436,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (slot == "colour"){
                     configSensor(port, 1, 2, 0);
                     this.btInterfaceFct(cmdConfigToORB);
-                    s.push(getSensorValue(port));
+                    s.push(getSensorValueColor(port));
                 }
                 if (slot == "light"){
                     configSensor(port, 1, 0, 0);
@@ -406,11 +451,13 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (slot == "rgb"){
                     configSensor(port, 1, 4, 0);
                     this.btInterfaceFct(cmdConfigToORB);
-                    s.push(getSensorValue(port));
+                    s.push(getSensorValueColor(port));
                 }
             }
             else if (sensor == "touch"){
-                throw new Error("Sensor not implemented (Firmware).");
+                //NXT-Touch-Sensor
+                configSensor(port, 3, 0, 0);
+                s.push(getSensorAnalog(port,0));
             }
             else if (sensor == "gyro"){
                 if (slot == "angle"){
@@ -423,18 +470,17 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                         configSensor(port, 1, 1, 0);
                         this.btInterfaceFct(cmdConfigToORB);
                     }
-                    //s.push(getSensorValue(port));
                     s.push(getSensorValueGyro(port));
                 }
             }
             else if (sensor == "infrared"){
                 if (slot == "distance"){
-                    configSensor(port, 1, 0, 0);//Kommt immer Wert 0 zurück, Firmware ?
+                    configSensor(port, 1, 0, 0);
                     this.btInterfaceFct(cmdConfigToORB);
                     s.push(getSensorValue(port));
                 }
                 if (slot == "presence"){
-                    configSensor(port, 1, 2, 0);//Kommt immer Wert 0 zurück, Firmware ?
+                    configSensor(port, 1, 2, 0);
                     this.btInterfaceFct(cmdConfigToORB);
                     s.push(getSensorValue(port));
                 }
@@ -583,17 +629,13 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             }
             else {/* Es Funktioniert nicht richtig jetzt :(  */
 
-               var distanceToTics = 1000.0/(driveConfig.wheelDiameter * Math.PI);
-               var maxspeed = 2.6*(driveConfig.wheelDiameter * Math.PI);
-               duration*= distanceToTics;
-               speed = Math.abs(((speed/100)*maxspeed)*distanceToTics);
+               return(this.setMoveToMotorOnProcent( port,speed, duration));
                //setMotor( port, 3,speed, getMotorPos(port) + gradToTics*duration );
-               setMotor( port, 3,speed, getMotorPos(port) + gradToTics*duration );
-               timeToGo = this.calcTimeToGo(speed, duration);
+               //timeToGo = this.calcTimeToGo(speed, duration);
             }
             //this.btInterfaceFct(cmdConfigToORB);
-            this.btInterfaceFct(cmdPropToORB);
-            return timeToGo;
+            //this.btInterfaceFct(cmdPropToORB);
+            return 0;
         };
 
         RobotOrbBehaviour.prototype.motorStopAction = function (name, port) {
@@ -638,7 +680,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             }
 
             if (distance === undefined) { // SPEED mode
-                this.setSpeed(speedL, speedR);
+                //this.setSpeed(speedL, speedR);
+                this.setSpeedProcent(speedL, speedR);//Funktioniert  nicht
                 return 0;
             }
             else { // MOVE_TO mode
@@ -646,7 +689,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (speed > 0) {
                     var distL = speedL * distance / speed;
                     var distR = speedR * distance / speed;
-                    return( this.setMoveTo(speedL,speedR, distL, distR ));
+                    //return( this.setMoveTo(speedL,speedR, distL, distR ));
+                    return( this.setMoveToProcent(speedL,speedR, distL, distR ));
                 }
             }
             this.setSpeed(0, 0);
@@ -664,7 +708,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             }
 
             if (angle === undefined) { // SPEED mode
-                this.setSpeed(speed, -speed);
+                //this.setSpeed(speed, -speed);
+                this.setSpeedProcent(speed,-speed)
                 return 0;
             }
             else { // MOVE_TO mode
@@ -673,7 +718,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 }
 
                 var distance = angle * Math.PI / 360 * driveConfig.trackWidth;
-                return( this.setMoveTo(speed, speed, distance, -distance ));
+                //return( this.setMoveTo(speed, speed, distance, -distance ));
+                return( this.setMoveToProcent(speed, speed, distance, -distance ));
             }
             return 0;
         };
