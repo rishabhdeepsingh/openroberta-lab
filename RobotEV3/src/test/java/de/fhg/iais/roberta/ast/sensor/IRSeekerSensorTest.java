@@ -40,8 +40,8 @@ public class IRSeekerSensorTest extends AstTest {
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) forest.get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) forest.get(1).get(1);
 
-        Assert.assertEquals("1", cs.getPort());
-        Assert.assertEquals("1", cs1.getPort());
+        Assert.assertEquals("1", cs.getUserDefinedPort());
+        Assert.assertEquals("1", cs1.getUserDefinedPort());
     }
 
     @Test

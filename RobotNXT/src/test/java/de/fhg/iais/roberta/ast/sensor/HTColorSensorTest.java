@@ -48,10 +48,10 @@ public class HTColorSensorTest extends NxtAstTest {
         HTColorSensor<Void> cs2 = (HTColorSensor<Void>) forest.get(2).get(1);
         HTColorSensor<Void> cs3 = (HTColorSensor<Void>) forest.get(3).get(1);
 
-        Assert.assertEquals("3", cs0.getPort());
-        Assert.assertEquals("1", cs1.getPort());
-        Assert.assertEquals("4", cs2.getPort());
-        Assert.assertEquals("2", cs3.getPort());
+        Assert.assertEquals("3", cs0.getUserDefinedPort());
+        Assert.assertEquals("1", cs1.getUserDefinedPort());
+        Assert.assertEquals("4", cs2.getUserDefinedPort());
+        Assert.assertEquals("2", cs3.getUserDefinedPort());
     }
 
     @Test

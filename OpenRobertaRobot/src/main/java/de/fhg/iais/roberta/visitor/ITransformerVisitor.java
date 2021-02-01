@@ -212,7 +212,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitClearDisplayAction(ClearDisplayAction<Phrase<V>> clearDisplayAction) {
-        return ClearDisplayAction.make(clearDisplayAction.getPort(), clearDisplayAction.getProperty(), clearDisplayAction.getComment());
+        return ClearDisplayAction.make(clearDisplayAction.getProperty(), clearDisplayAction.getComment(), clearDisplayAction.port);
     }
 
     @Override
@@ -242,7 +242,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     @Override
     default Phrase<V> visitLightStatusAction(LightStatusAction<Phrase<V>> lightStatusAction) {
         return LightStatusAction
-            .make(lightStatusAction.getPort(), lightStatusAction.getStatus(), lightStatusAction.getProperty(), lightStatusAction.getComment());
+            .make(lightStatusAction.getUserDefinedPort(), lightStatusAction.getStatus(), lightStatusAction.getProperty(), lightStatusAction.getComment());
     }
 
     @Override
@@ -343,14 +343,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitRgbColor(RgbColor<Phrase<V>> rgbColor) {
-        return RgbColor
-            .make(
-                (Expr<V>) rgbColor.getR().modify(this),
-                (Expr<V>) rgbColor.getG().modify(this),
-                (Expr<V>) rgbColor.getB().modify(this),
-                (Expr<V>) rgbColor.getA().modify(this),
-                rgbColor.getProperty(),
-                rgbColor.getComment());
+        return RgbColor.make(rgbColor.getProperty(), rgbColor.getComment(), (Expr<V>) rgbColor.getR().modify(this), (Expr<V>) rgbColor.getG().modify(this), (Expr<V>) rgbColor.getB().modify(this), (Expr<V>) rgbColor.getA().modify(this));
     }
 
     @Override
@@ -651,6 +644,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
                 (Expr<V>) methodIfReturn.getCondition().modify(this),
                 methodIfReturn.getReturnType(),
                 (Expr<V>) methodIfReturn.getReturnValue().modify(this),
+                methodIfReturn.getValue(),
                 methodIfReturn.getProperty(),
                 methodIfReturn.getComment());
     }
@@ -805,7 +799,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitKeysSensor(KeysSensor<Phrase<V>> keysSensor) {
         return KeysSensor
             .make(
-                new SensorMetaDataBean(keysSensor.getPort(), keysSensor.getMode(), keysSensor.getSlot(), keysSensor.isPortInMutation()),
+                new SensorMetaDataBean(keysSensor.getUserDefinedPort(), keysSensor.getMode(), keysSensor.getSlot(), keysSensor.isPortInMutation()),
                 keysSensor.getProperty(),
                 keysSensor.getComment());
     }
@@ -814,7 +808,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitColorSensor(ColorSensor<Phrase<V>> colorSensor) {
         return ColorSensor
             .make(
-                new SensorMetaDataBean(colorSensor.getPort(), colorSensor.getMode(), colorSensor.getSlot(), colorSensor.isPortInMutation()),
+                new SensorMetaDataBean(colorSensor.getUserDefinedPort(), colorSensor.getMode(), colorSensor.getSlot(), colorSensor.isPortInMutation()),
                 colorSensor.getProperty(),
                 colorSensor.getComment());
     }
@@ -823,7 +817,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitLightSensor(LightSensor<Phrase<V>> lightSensor) {
         return LightSensor
             .make(
-                new SensorMetaDataBean(lightSensor.getPort(), lightSensor.getMode(), lightSensor.getSlot(), lightSensor.isPortInMutation()),
+                new SensorMetaDataBean(lightSensor.getUserDefinedPort(), lightSensor.getMode(), lightSensor.getSlot(), lightSensor.isPortInMutation()),
                 lightSensor.getProperty(),
                 lightSensor.getComment());
     }
@@ -832,7 +826,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitSoundSensor(SoundSensor<Phrase<V>> soundSensor) {
         return SoundSensor
             .make(
-                new SensorMetaDataBean(soundSensor.getPort(), soundSensor.getMode(), soundSensor.getSlot(), soundSensor.isPortInMutation()),
+                new SensorMetaDataBean(soundSensor.getUserDefinedPort(), soundSensor.getMode(), soundSensor.getSlot(), soundSensor.isPortInMutation()),
                 soundSensor.getProperty(),
                 soundSensor.getComment());
     }
@@ -841,7 +835,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitEncoderSensor(EncoderSensor<Phrase<V>> encoderSensor) {
         return EncoderSensor
             .make(
-                new SensorMetaDataBean(encoderSensor.getPort(), encoderSensor.getMode(), encoderSensor.getSlot(), encoderSensor.isPortInMutation()),
+                new SensorMetaDataBean(encoderSensor.getUserDefinedPort(), encoderSensor.getMode(), encoderSensor.getSlot(), encoderSensor.isPortInMutation()),
                 encoderSensor.getProperty(),
                 encoderSensor.getComment());
     }
@@ -850,7 +844,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitGyroSensor(GyroSensor<Phrase<V>> gyroSensor) {
         return GyroSensor
             .make(
-                new SensorMetaDataBean(gyroSensor.getPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.isPortInMutation()),
+                new SensorMetaDataBean(gyroSensor.getUserDefinedPort(), gyroSensor.getMode(), gyroSensor.getSlot(), gyroSensor.isPortInMutation()),
                 gyroSensor.getProperty(),
                 gyroSensor.getComment());
     }
@@ -859,7 +853,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitInfraredSensor(InfraredSensor<Phrase<V>> infraredSensor) {
         return InfraredSensor
             .make(
-                new SensorMetaDataBean(infraredSensor.getPort(), infraredSensor.getMode(), infraredSensor.getSlot(), infraredSensor.isPortInMutation()),
+                new SensorMetaDataBean(infraredSensor.getUserDefinedPort(), infraredSensor.getMode(), infraredSensor.getSlot(), infraredSensor.isPortInMutation()),
                 infraredSensor.getProperty(),
                 infraredSensor.getComment());
     }
@@ -868,7 +862,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitTimerSensor(TimerSensor<Phrase<V>> timerSensor) {
         return TimerSensor
             .make(
-                new SensorMetaDataBean(timerSensor.getPort(), timerSensor.getMode(), timerSensor.getSlot(), timerSensor.isPortInMutation()),
+                new SensorMetaDataBean(timerSensor.getUserDefinedPort(), timerSensor.getMode(), timerSensor.getSlot(), timerSensor.isPortInMutation()),
                 timerSensor.getProperty(),
                 timerSensor.getComment());
     }
@@ -877,7 +871,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitTouchSensor(TouchSensor<Phrase<V>> touchSensor) {
         return TouchSensor
             .make(
-                new SensorMetaDataBean(touchSensor.getPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.isPortInMutation()),
+                new SensorMetaDataBean(touchSensor.getUserDefinedPort(), touchSensor.getMode(), touchSensor.getSlot(), touchSensor.isPortInMutation()),
                 touchSensor.getProperty(),
                 touchSensor.getComment());
     }
@@ -886,7 +880,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitUltrasonicSensor(UltrasonicSensor<Phrase<V>> ultrasonicSensor) {
         return UltrasonicSensor
             .make(
-                new SensorMetaDataBean(ultrasonicSensor.getPort(), ultrasonicSensor.getMode(), ultrasonicSensor.getSlot(), ultrasonicSensor.isPortInMutation()),
+                new SensorMetaDataBean(ultrasonicSensor.getUserDefinedPort(), ultrasonicSensor.getMode(), ultrasonicSensor.getSlot(), ultrasonicSensor.isPortInMutation()),
                 ultrasonicSensor.getProperty(),
                 ultrasonicSensor.getComment());
     }
@@ -895,7 +889,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitCompassSensor(CompassSensor<Phrase<V>> compassSensor) {
         return CompassSensor
             .make(
-                new SensorMetaDataBean(compassSensor.getPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.isPortInMutation()),
+                new SensorMetaDataBean(compassSensor.getUserDefinedPort(), compassSensor.getMode(), compassSensor.getSlot(), compassSensor.isPortInMutation()),
                 compassSensor.getProperty(),
                 compassSensor.getComment());
     }
@@ -905,7 +899,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         return TemperatureSensor
             .make(
                 new SensorMetaDataBean(
-                    temperatureSensor.getPort(),
+                    temperatureSensor.getUserDefinedPort(),
                     temperatureSensor.getMode(),
                     temperatureSensor.getSlot(),
                     temperatureSensor.isPortInMutation()),
@@ -917,17 +911,17 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitVoltageSensor(VoltageSensor<Phrase<V>> voltageSensor) {
         return VoltageSensor
             .make(
-                new SensorMetaDataBean(voltageSensor.getPort(), voltageSensor.getMode(), voltageSensor.getSlot(), voltageSensor.isPortInMutation()),
+                new SensorMetaDataBean(voltageSensor.getUserDefinedPort(), voltageSensor.getMode(), voltageSensor.getSlot(), voltageSensor.isPortInMutation()),
                 voltageSensor.getProperty(),
                 voltageSensor.getComment());
     }
 
     @Override
-    default Phrase<V> visitAccelerometer(AccelerometerSensor<Phrase<V>> accelerometerSensor) {
+    default Phrase<V> visitAccelerometerSensor(AccelerometerSensor<Phrase<V>> accelerometerSensor) {
         return AccelerometerSensor
             .make(
                 new SensorMetaDataBean(
-                    accelerometerSensor.getPort(),
+                    accelerometerSensor.getUserDefinedPort(),
                     accelerometerSensor.getMode(),
                     accelerometerSensor.getSlot(),
                     accelerometerSensor.isPortInMutation()),
@@ -939,7 +933,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitPinTouchSensor(PinTouchSensor<Phrase<V>> pinTouchSensor) {
         return PinTouchSensor
             .make(
-                new SensorMetaDataBean(pinTouchSensor.getPort(), pinTouchSensor.getMode(), pinTouchSensor.getSlot(), pinTouchSensor.isPortInMutation()),
+                new SensorMetaDataBean(pinTouchSensor.getUserDefinedPort(), pinTouchSensor.getMode(), pinTouchSensor.getSlot(), pinTouchSensor.isPortInMutation()),
                 pinTouchSensor.getProperty(),
                 pinTouchSensor.getComment());
     }
@@ -948,7 +942,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitGestureSensor(GestureSensor<Phrase<V>> gestureSensor) {
         return GestureSensor
             .make(
-                new SensorMetaDataBean(gestureSensor.getPort(), gestureSensor.getMode(), gestureSensor.getSlot(), gestureSensor.isPortInMutation()),
+                new SensorMetaDataBean(gestureSensor.getUserDefinedPort(), gestureSensor.getMode(), gestureSensor.getSlot(), gestureSensor.isPortInMutation()),
                 gestureSensor.getProperty(),
                 gestureSensor.getComment());
     }
@@ -958,7 +952,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         return PinGetValueSensor
             .make(
                 new SensorMetaDataBean(
-                    pinGetValueSensor.getPort(),
+                    pinGetValueSensor.getUserDefinedPort(),
                     pinGetValueSensor.getMode(),
                     pinGetValueSensor.getSlot(),
                     pinGetValueSensor.isPortInMutation()),
@@ -983,7 +977,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitIRSeekerSensor(IRSeekerSensor<Phrase<V>> irSeekerSensor) {
         return IRSeekerSensor
             .make(
-                new SensorMetaDataBean(irSeekerSensor.getPort(), irSeekerSensor.getMode(), irSeekerSensor.getSlot(), irSeekerSensor.isPortInMutation()),
+                new SensorMetaDataBean(irSeekerSensor.getUserDefinedPort(), irSeekerSensor.getMode(), irSeekerSensor.getSlot(), irSeekerSensor.isPortInMutation()),
                 irSeekerSensor.getProperty(),
                 irSeekerSensor.getComment());
     }
@@ -992,7 +986,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitMoistureSensor(MoistureSensor<Phrase<V>> moistureSensor) {
         return MoistureSensor
             .make(
-                new SensorMetaDataBean(moistureSensor.getPort(), moistureSensor.getMode(), moistureSensor.getSlot(), moistureSensor.isPortInMutation()),
+                new SensorMetaDataBean(moistureSensor.getUserDefinedPort(), moistureSensor.getMode(), moistureSensor.getSlot(), moistureSensor.isPortInMutation()),
                 moistureSensor.getProperty(),
                 moistureSensor.getComment());
     }
@@ -1001,7 +995,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitHumiditySensor(HumiditySensor<Phrase<V>> humiditySensor) {
         return HumiditySensor
             .make(
-                new SensorMetaDataBean(humiditySensor.getPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.isPortInMutation()),
+                new SensorMetaDataBean(humiditySensor.getUserDefinedPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.isPortInMutation()),
                 humiditySensor.getProperty(),
                 humiditySensor.getComment());
     }
@@ -1010,7 +1004,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitMotionSensor(MotionSensor<Phrase<V>> motionSensor) {
         return MotionSensor
             .make(
-                new SensorMetaDataBean(motionSensor.getPort(), motionSensor.getMode(), motionSensor.getSlot(), motionSensor.isPortInMutation()),
+                new SensorMetaDataBean(motionSensor.getUserDefinedPort(), motionSensor.getMode(), motionSensor.getSlot(), motionSensor.isPortInMutation()),
                 motionSensor.getProperty(),
                 motionSensor.getComment());
     }
@@ -1019,7 +1013,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitDropSensor(DropSensor<Phrase<V>> dropSensor) {
         return DropSensor
             .make(
-                new SensorMetaDataBean(dropSensor.getPort(), dropSensor.getMode(), dropSensor.getSlot(), dropSensor.isPortInMutation()),
+                new SensorMetaDataBean(dropSensor.getUserDefinedPort(), dropSensor.getMode(), dropSensor.getSlot(), dropSensor.isPortInMutation()),
                 dropSensor.getProperty(),
                 dropSensor.getComment());
     }
@@ -1028,7 +1022,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitPulseSensor(PulseSensor<Phrase<V>> pulseSensor) {
         return PulseSensor
             .make(
-                new SensorMetaDataBean(pulseSensor.getPort(), pulseSensor.getMode(), pulseSensor.getSlot(), pulseSensor.isPortInMutation()),
+                new SensorMetaDataBean(pulseSensor.getUserDefinedPort(), pulseSensor.getMode(), pulseSensor.getSlot(), pulseSensor.isPortInMutation()),
                 pulseSensor.getProperty(),
                 pulseSensor.getComment());
     }
@@ -1037,7 +1031,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitRfidSensor(RfidSensor<Phrase<V>> rfidSensor) {
         return RfidSensor
             .make(
-                new SensorMetaDataBean(rfidSensor.getPort(), rfidSensor.getMode(), rfidSensor.getSlot(), rfidSensor.isPortInMutation()),
+                new SensorMetaDataBean(rfidSensor.getUserDefinedPort(), rfidSensor.getMode(), rfidSensor.getSlot(), rfidSensor.isPortInMutation()),
                 rfidSensor.getProperty(),
                 rfidSensor.getComment());
     }
@@ -1046,7 +1040,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitVemlLightSensor(VemlLightSensor<Phrase<V>> vemlLightSensor) {
         return VemlLightSensor
             .make(
-                new SensorMetaDataBean(vemlLightSensor.getPort(), vemlLightSensor.getMode(), vemlLightSensor.getSlot(), vemlLightSensor.isPortInMutation()),
+                new SensorMetaDataBean(vemlLightSensor.getUserDefinedPort(), vemlLightSensor.getMode(), vemlLightSensor.getSlot(), vemlLightSensor.isPortInMutation()),
                 vemlLightSensor.getProperty(),
                 vemlLightSensor.getComment());
     }
@@ -1055,7 +1049,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitParticleSensor(ParticleSensor<Phrase<V>> particleSensor) {
         return ParticleSensor
             .make(
-                new SensorMetaDataBean(particleSensor.getPort(), particleSensor.getMode(), particleSensor.getSlot(), particleSensor.isPortInMutation()),
+                new SensorMetaDataBean(particleSensor.getUserDefinedPort(), particleSensor.getMode(), particleSensor.getSlot(), particleSensor.isPortInMutation()),
                 particleSensor.getProperty(),
                 particleSensor.getComment());
     }
@@ -1064,7 +1058,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitHTColorSensor(HTColorSensor<Phrase<V>> htColorSensor) {
         return HTColorSensor
             .make(
-                new SensorMetaDataBean(htColorSensor.getPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.isPortInMutation()),
+                new SensorMetaDataBean(htColorSensor.getUserDefinedPort(), htColorSensor.getMode(), htColorSensor.getSlot(), htColorSensor.isPortInMutation()),
                 htColorSensor.getProperty(),
                 htColorSensor.getComment());
     }

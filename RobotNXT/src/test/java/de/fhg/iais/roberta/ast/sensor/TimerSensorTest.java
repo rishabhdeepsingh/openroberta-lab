@@ -28,7 +28,7 @@ public class TimerSensorTest extends NxtAstTest {
 
         TimerSensor<Void> cs = (TimerSensor<Void>) forest.get(0).get(1);
 
-        Assert.assertEquals("1", cs.getPort());
+        Assert.assertEquals("1", cs.getUserDefinedPort());
     }
 
     @Test

@@ -40,9 +40,9 @@ public class ColorSensorTest extends NxtAstTest {
         final ColorSensor<Void> cs1 = (ColorSensor<Void>) forest.get(1).get(1);
         final ColorSensor<Void> cs2 = (ColorSensor<Void>) forest.get(2).get(1);
 
-        Assert.assertEquals("3", cs.getPort());
-        Assert.assertEquals("1", cs1.getPort());
-        Assert.assertEquals("4", cs2.getPort());
+        Assert.assertEquals("3", cs.getUserDefinedPort());
+        Assert.assertEquals("1", cs1.getUserDefinedPort());
+        Assert.assertEquals("4", cs2.getUserDefinedPort());
     }
 
     @Test

@@ -32,8 +32,7 @@ public class TransformerTest extends AstTest {
                 + "MotorOnAction[MotorPort,MotionParam[speed=SensorExpr[TemperatureSensor[TempPort,TempMode,TempSlot]],duration=null]]]]]"; // simple actor + sensor in motionparam usage
 
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_sensor_actor.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_sensor_actor.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -48,8 +47,7 @@ public class TransformerTest extends AstTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[TemperatureSensor[GetSamplePort,TEMPERATURE,GetSampleSlot]]]])]]]]";
 
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_get_sample.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_get_sample.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -65,8 +63,7 @@ public class TransformerTest extends AstTest {
                 + "[Location[x=739,y=83],KeysSensor[KeysPort,KeysMode,KeysSlot]]]]"; // unused block
 
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_disabled.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_disabled.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -91,8 +88,7 @@ public class TransformerTest extends AstTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]])]]]]";
 
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_control.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_control.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -110,8 +106,7 @@ public class TransformerTest extends AstTest {
                 + "[Location[x=166,y=355],MethodVoid[unused,,DebugAction[SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]]"; // unused function
 
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_functions.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_functions.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("2.0").build())
                 .build();
 
@@ -123,8 +118,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnSameAST_WhenGivenNewerVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[SensorExpr[KeysSensor[A,PRESSED,EMPTY_SLOT]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_newer_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_newer_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("3.0").build())
                 .build();
 
@@ -138,8 +132,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedAST_WhenGivenOlderVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_older_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_older_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("1.0").build())
                 .build();
 
@@ -153,8 +146,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedAST_WhenGivenEmptyVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_empty_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_empty_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion("").build())
                 .build();
 
@@ -168,8 +160,7 @@ public class TransformerTest extends AstTest {
     public void executeTransformer_ShouldReturnTransformedAST_WhenGivenNoVersionAST() {
         String expectedProgramAst = "BlockAST[project=[[Location[x=671,y=5],MainTask[]," + "DebugAction[SensorExpr[KeysSensor[KeysPort,KeysMode,KeysSlot]]]]]]"; // simple sensor usage
         Project project =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/ast/transform/old_no_version.xml"))
+            UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/ast/transform/old_no_version.xml"))
                 .setConfigurationAst(new ConfigurationAst.Builder().setXmlVersion(null).build())
                 .build();
 
@@ -197,7 +188,7 @@ public class TransformerTest extends AstTest {
         Assert.assertEquals("3.0", project.getConfigurationAst().getXmlVersion());
     }
 
-    private static class TestTransformerVisitor implements ITransformerVisitor<Void> {
+    public static class TestTransformerVisitor implements ITransformerVisitor<Void> {
 
         private final BlocklyDropdownFactory blocklyDropdownFactory;
 

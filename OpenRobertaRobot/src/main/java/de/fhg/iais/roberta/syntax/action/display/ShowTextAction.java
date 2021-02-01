@@ -13,14 +13,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 
 /**
  * This class represents the <b>robActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -94,11 +92,6 @@ public class ShowTextAction<V> extends Action<V> {
         return "ShowTextAction [" + this.msg + ", " + this.x + ", " + this.y + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IDisplayVisitor<V>) visitor).visitShowTextAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -106,7 +99,7 @@ public class ShowTextAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
@@ -116,10 +109,10 @@ public class ShowTextAction<V> extends Action<V> {
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
         return ShowTextAction
             .make(
-                helper.convertPhraseToExpr(msg),
-                helper.convertPhraseToExpr(col),
-                helper.convertPhraseToExpr(row),
-                factory.sanitizePort(port),
+                Jaxb2Ast.convertPhraseToExpr(msg),
+                Jaxb2Ast.convertPhraseToExpr(col),
+                Jaxb2Ast.convertPhraseToExpr(row),
+                Jaxb2Ast.sanitizePort(port),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
     }

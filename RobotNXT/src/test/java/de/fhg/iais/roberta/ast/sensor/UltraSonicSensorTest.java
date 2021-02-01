@@ -39,8 +39,8 @@ public class UltraSonicSensorTest extends NxtAstTest {
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) forest.get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) forest.get(1).get(1);
 
-        Assert.assertEquals("4", cs.getPort());
-        Assert.assertEquals("2", cs1.getPort());
+        Assert.assertEquals("4", cs.getUserDefinedPort());
+        Assert.assertEquals("2", cs1.getUserDefinedPort());
     }
 
     @Test

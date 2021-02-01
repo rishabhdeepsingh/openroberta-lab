@@ -40,8 +40,8 @@ public class InfraredSensorTest extends AstTest {
         InfraredSensor<Void> cs = (InfraredSensor<Void>) forest.get(0).get(1);
         InfraredSensor<Void> cs1 = (InfraredSensor<Void>) forest.get(1).get(1);
 
-        Assert.assertEquals("4", cs.getPort());
-        Assert.assertEquals("3", cs1.getPort());
+        Assert.assertEquals("4", cs.getUserDefinedPort());
+        Assert.assertEquals("3", cs1.getUserDefinedPort());
     }
 
     @Test

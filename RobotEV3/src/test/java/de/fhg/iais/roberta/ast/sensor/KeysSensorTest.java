@@ -23,7 +23,7 @@ public class KeysSensorTest extends AstTest {
     public void getKey() throws Exception {
         List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) forest.get(0).get(1);
-        Assert.assertEquals("ENTER", bs.getPort());
+        Assert.assertEquals("ENTER", bs.getUserDefinedPort());
     }
 
     @Test

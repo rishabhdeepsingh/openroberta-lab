@@ -38,8 +38,8 @@ public class GyroSensorTest extends AstTest {
         GyroSensor<Void> cs = (GyroSensor<Void>) forest.get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) forest.get(1).get(1);
 
-        Assert.assertEquals("2", cs.getPort());
-        Assert.assertEquals("4", cs1.getPort());
+        Assert.assertEquals("2", cs.getUserDefinedPort());
+        Assert.assertEquals("4", cs1.getUserDefinedPort());
     }
 
     @Test

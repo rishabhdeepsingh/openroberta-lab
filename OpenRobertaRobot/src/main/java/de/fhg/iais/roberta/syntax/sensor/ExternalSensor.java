@@ -7,18 +7,14 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.syntax.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-public abstract class ExternalSensor<V> extends Sensor<V> {
+public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDefinedPort<V> {
     private final String port;
     private final String mode;
     private final String slot;
@@ -45,7 +41,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
     /**
      * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      */
-    public String getPort() {
+    public String getUserDefinedPort() {
         return this.port;
     }
 
@@ -66,7 +62,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " [" + this.getPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
+        return this.getClass().getSimpleName() + " [" + this.getUserDefinedPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
     }
 
     /**
@@ -76,14 +72,14 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
         String slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
-        return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
+        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), isPortInMutation);
     }
 
     @Override
@@ -97,22 +93,19 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             addMutation = true;
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, this.getMode().toString());
             if ( this.isPortInMutation ) {
-                mutation.setPort(this.getPort().toString());
+                mutation.setPort(this.getUserDefinedPort().toString());
             }
         }
-        if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
-            String fieldValue = this.getPort();
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+        String portValue = this.getUserDefinedPort();
+        if ( portValue.equals(BlocklyConstants.NO_PORT) ) {
+            portValue = "";
         }
-        if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
-            String fieldValue = this.getSlot();
-
-            //TODO: Remove as soon as possible. This is only for deprecated XML resources for unit tests.
-            if ( fieldValue.equals(BlocklyConstants.EMPTY_SLOT) ) {
-                fieldValue = "";
-            }
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, portValue);
+        String slotValue = this.getSlot();
+        if ( slotValue.equals(BlocklyConstants.NO_SLOT) || slotValue.equals(BlocklyConstants.EMPTY_SLOT) ) {
+            slotValue = "";
         }
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, slotValue);
         if ( addMutation ) {
             jaxbDestination.setMutation(mutation);
         }
@@ -126,7 +119,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
         return InfraredSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }

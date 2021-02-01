@@ -40,8 +40,8 @@ public class EncoderSensorTest extends NxtAstTest {
         EncoderSensor<Void> cs = (EncoderSensor<Void>) forest.get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) forest.get(1).get(1);
 
-        Assert.assertEquals("A", cs.getPort());
-        Assert.assertEquals("C", cs1.getPort());
+        Assert.assertEquals("A", cs.getUserDefinedPort());
+        Assert.assertEquals("C", cs1.getUserDefinedPort());
     }
 
     @Test

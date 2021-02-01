@@ -1,15 +1,13 @@
 package de.fhg.iais.roberta.components;
 
 import java.io.StringWriter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,6 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -61,6 +58,7 @@ public final class Project {
     private String compiledHex = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
+    private List<String> errorAndWarningMessages = null;
 
     private Project() {
     }
@@ -258,12 +256,23 @@ public final class Project {
         this.resultParams.put(key, value);
     }
 
-    public void addToErrorCounter(int nErrors) {
+    public void addToErrorCounter(int nErrors, List<String> errorAndWarningMessages) {
         this.errorCounter += nErrors;
+        if (errorAndWarningMessages != null) {
+            if (this.errorAndWarningMessages == null) {
+                this.errorAndWarningMessages = new ArrayList<>(errorAndWarningMessages);
+            } else {
+                this.errorAndWarningMessages.addAll(errorAndWarningMessages);
+            }
+        }
     }
 
     public int getErrorCounter() {
         return this.errorCounter;
+    }
+
+    public List<String> getErrorAndWarningMessages() {
+        return errorAndWarningMessages;
     }
 
     public String getAnnotatedProgramAsXml() {
@@ -401,7 +410,7 @@ public final class Project {
                     if ( (xmlversion == null) || xmlversion.isEmpty() ) {
                         blockSet.setXmlversion("2.0");
                     }
-                    Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.project.robotFactory);
+                    Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst(this.project.robotFactory);
                     this.project.program = transformer.blocks2Ast(blockSet);
                 } catch ( JAXBException e ) {
                     LOG.error("Transformer failed", e);

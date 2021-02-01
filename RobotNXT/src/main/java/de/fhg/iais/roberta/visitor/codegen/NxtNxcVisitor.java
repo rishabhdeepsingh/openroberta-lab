@@ -696,7 +696,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("_readLightSensor(");
         this.sb.append(portName);
         this.sb.append(", ");
@@ -716,14 +716,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("ButtonPressed(" + getCodeName(keysSensor.getPort()) + ", false)");
+        this.sb.append("ButtonPressed(" + getCodeName(keysSensor.getUserDefinedPort()) + ", false)");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         this.sb.append("SensorColor(");
-        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append(portName).append(", \"").append(colorSensor.getMode()).append("\")");
         return null;
     }
@@ -731,14 +731,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         this.sb.append("SensorHtColor(");
-        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append(portName).append(", \"").append(htColorSensor.getMode()).append("\")");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("Sensor(");
         this.sb.append(portName);
         this.sb.append(")");
@@ -747,7 +747,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String userDefinedPort = encoderSensor.getPort();
+        String userDefinedPort = encoderSensor.getUserDefinedPort();
         String mode = encoderSensor.getMode();
         switch ( mode ) {
             case SC.RESET:
@@ -771,7 +771,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort();
+        String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
@@ -788,7 +788,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("Sensor(" + portName);
         this.sb.append(")");
         return null;
@@ -796,7 +796,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("SensorUS(" + portName + ")");
         return null;
     }

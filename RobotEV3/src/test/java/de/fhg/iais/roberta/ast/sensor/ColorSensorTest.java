@@ -48,10 +48,10 @@ public class ColorSensorTest extends AstTest {
         ColorSensor<Void> cs2 = (ColorSensor<Void>) forest.get(2).get(1);
         ColorSensor<Void> cs3 = (ColorSensor<Void>) forest.get(3).get(1);
 
-        Assert.assertEquals("3", cs.getPort());
-        Assert.assertEquals("1", cs1.getPort());
-        Assert.assertEquals("2", cs2.getPort());
-        Assert.assertEquals("4", cs3.getPort());
+        Assert.assertEquals("3", cs.getUserDefinedPort());
+        Assert.assertEquals("1", cs1.getUserDefinedPort());
+        Assert.assertEquals("2", cs2.getUserDefinedPort());
+        Assert.assertEquals("4", cs3.getUserDefinedPort());
     }
 
     @Test

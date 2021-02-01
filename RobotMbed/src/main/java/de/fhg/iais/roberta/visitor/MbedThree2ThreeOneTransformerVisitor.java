@@ -78,7 +78,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
 
     @Override
     public Phrase<Void> visitLedOnAction(LedOnAction<Phrase<Void>> ledOnAction) {
-        String newName = getNewName(ledOnAction.getPort());
+        String newName = getNewName(ledOnAction.getUserDefinedPort());
 
         return LedOnAction.make(newName, (Expr<Void>) ledOnAction.getLedColor().modify(this), ledOnAction.getProperty(), ledOnAction.getComment());
     }
@@ -99,7 +99,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
 
     @Override
     public Phrase<Void> visitLightStatusAction(LightStatusAction<Phrase<Void>> lightStatusAction) {
-        String newName = getNewName(lightStatusAction.getPort());
+        String newName = getNewName(lightStatusAction.getUserDefinedPort());
 
         return LightStatusAction.make(newName, lightStatusAction.getStatus(), lightStatusAction.getProperty(), lightStatusAction.getComment());
     }
@@ -146,7 +146,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
     }
 
     @Override
-    public Phrase<Void> visitAccelerometer(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
+    public Phrase<Void> visitAccelerometerSensor(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
         return AccelerometerSensor.make(getNewBean(accelerometerSensor), accelerometerSensor.getProperty(), accelerometerSensor.getComment());
     }
 
@@ -189,7 +189,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
     }
 
     private SensorMetaDataBean getNewBean(ExternalSensor<?> sensor) {
-        String newName = getNewName(sensor.getPort());
+        String newName = getNewName(sensor.getUserDefinedPort());
         return new SensorMetaDataBean(newName, sensor.getMode(), sensor.getSlot(), sensor.isPortInMutation());
     }
 }

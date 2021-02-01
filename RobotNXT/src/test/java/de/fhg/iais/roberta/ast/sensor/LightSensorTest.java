@@ -39,8 +39,8 @@ public class LightSensorTest extends NxtAstTest {
         final LightSensor<Void> cs = (LightSensor<Void>) forest.get(0).get(1);
         final LightSensor<Void> cs1 = (LightSensor<Void>) forest.get(1).get(1);
 
-        Assert.assertEquals("3", cs.getPort());
-        Assert.assertEquals("4", cs1.getPort());
+        Assert.assertEquals("3", cs.getUserDefinedPort());
+        Assert.assertEquals("4", cs1.getUserDefinedPort());
     }
 
     @Test

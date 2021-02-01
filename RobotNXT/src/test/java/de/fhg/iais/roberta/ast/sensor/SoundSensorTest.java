@@ -25,7 +25,7 @@ public class SoundSensorTest extends NxtAstTest {
 
         SoundSensor<Void> cs = (SoundSensor<Void>) forest.get(0).get(1);
 
-        Assert.assertEquals("2", cs.getPort());
+        Assert.assertEquals("2", cs.getUserDefinedPort());
     }
 
     @Test

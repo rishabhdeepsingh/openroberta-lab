@@ -25,7 +25,7 @@ public class TouchSensorTest extends AstTest {
 
         TouchSensor<Void> cs = (TouchSensor<Void>) forest.get(0).get(1);
 
-        Assert.assertEquals("1", cs.getPort());
+        Assert.assertEquals("1", cs.getUserDefinedPort());
     }
 
     @Test
