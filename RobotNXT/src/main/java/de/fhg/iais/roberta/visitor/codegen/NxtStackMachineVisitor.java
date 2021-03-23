@@ -297,7 +297,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitTouchSensor(TouchSensor<V> touchSensor) {
-        String port = touchSensor.getPort();
+        String port = touchSensor.getUserDefinedPort();
         JSONObject o = makeLeaf(C.GET_SAMPLE, touchSensor).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
@@ -305,7 +305,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitColorSensor(ColorSensor<V> colorSensor) {
         String mode = colorSensor.getMode();
-        String port = colorSensor.getPort();
+        String port = colorSensor.getUserDefinedPort();
         JSONObject o = makeLeaf(C.GET_SAMPLE, colorSensor).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
@@ -313,7 +313,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitEncoderSensor(EncoderSensor<V> encoderSensor) {
         String mode = encoderSensor.getMode().toLowerCase();
-        String port = encoderSensor.getPort().toLowerCase();
+        String port = encoderSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
         if ( mode.equals(C.RESET) ) {
             o = makeLeaf(C.ENCODER_SENSOR_RESET, encoderSensor).put(C.PORT, port).put(C.NAME, "ev3");
@@ -332,7 +332,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
-        String mode = keysSensor.getPort().toLowerCase();
+        String mode = keysSensor.getUserDefinedPort().toLowerCase();
         JSONObject o = makeLeaf(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
         return app(o);
     }
@@ -340,14 +340,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitLightSensor(LightSensor<V> lightSensor) {
         String mode = lightSensor.getMode().toLowerCase();
-        String port = lightSensor.getPort().toLowerCase();
+        String port = lightSensor.getUserDefinedPort().toLowerCase();
         JSONObject o = makeLeaf(C.GET_SAMPLE, lightSensor).put(C.GET_SAMPLE, C.COLOR).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitTimerSensor(TimerSensor<V> timerSensor) {
-        String port = timerSensor.getPort();
+        String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
             o = makeLeaf(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
@@ -359,7 +359,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
-        String port = sensorGetSample.getPort();
+        String port = sensorGetSample.getUserDefinedPort();
         String mode = sensorGetSample.getMode();
 
         JSONObject o = makeLeaf(C.GET_SAMPLE, sensorGetSample).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
@@ -368,7 +368,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
-        String port = soundSensor.getPort();
+        String port = soundSensor.getUserDefinedPort();
         JSONObject o = makeLeaf(C.GET_SAMPLE, soundSensor).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
@@ -383,7 +383,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitGyroSensor(GyroSensor<V> gyroSensor) {
         String mode = gyroSensor.getMode().toLowerCase();
-        String port = gyroSensor.getPort().toLowerCase();
+        String port = gyroSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
         if ( mode.equals(C.RESET) ) {
             o = makeLeaf(C.GYRO_SENSOR_RESET, gyroSensor).put(C.PORT, port).put(C.NAME, "ev3");
@@ -391,11 +391,6 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             o = makeLeaf(C.GET_SAMPLE, gyroSensor).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.NAME, "ev3");
         }
         return app(o);
-    }
-
-    @Override
-    public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
-        return null;
     }
 
     @Override
@@ -411,7 +406,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
-        String port = ultrasonicSensor.getPort();
+        String port = ultrasonicSensor.getUserDefinedPort();
         JSONObject o = makeLeaf(C.GET_SAMPLE, ultrasonicSensor).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }

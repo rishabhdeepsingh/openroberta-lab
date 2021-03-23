@@ -5,10 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,7 +19,6 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,34 +39,41 @@ import org.xml.sax.InputSource;
 public class ReuseIntegratioAsUnitTest {
     private static final Logger LOG = LoggerFactory.getLogger(ReuseIntegratioAsUnitTest.class);
     private static final String ROBOT_NAME_FOR_COMMON_TESTS = "ev3lejosv1";
-    private static final String[] ROBOT_NAMES_FOR_TARGET_LANGUAGE_GENERATION =
+    private static final String[] ROBOTS_FOR_TARGET_LANGUAGE_GENERATION =
         {
             "ev3lejosv1",
             "calliope2017NoBlue",
             "ev3dev",
             "wedo"
         };
-    private static final String TARGET_DIR = "target/unitTests";
-    private static final String RESOURCE_BASE_COMMON = "/crossCompilerTests/common/";
-    private static final String RESOURCE_BASE_SPECIFIC = "/crossCompilerTests/robotSpecific/";
 
-    private static final String AST = "/ast";
-    private static final String PROG_GENERATED = "/progGenerated";
-    private static final String PROG_REGENERATED = "/progRegenerated";
-    private static final String CONFIG_GENERATED = "/configGenerated";
-    private static final String CONFIG_REGENERATED = "/configRegenerated";
-    private static final String TARGET_LANGUAGE_GENERATED = "/targetLanguage";
-    private static final String TARGET_LANGUAGE_SOURCE = "/targetSource";
+    private static final String COMMON = "common/";
+    private static final String ROBOT_SPECIFIC = "robotSpecific/";
+    private static final String EXPECTED = "_expected/";
+
+    private static final String TARGET_DIR = "target/unitTests/";
+    private static final String CROSS_COMPILER_TESTS = "/crossCompilerTests/";
+    public static final String TEST_SPEC_YML = "classpath:/crossCompilerTests/testSpec.yml";
+
+    private static final String AST_GENERATED = "astGenerated/";
+    private static final String PROG_GENERATED = "progGenerated/";
+    private static final String PROG_REGENERATED = "progRegenerated/";
+    private static final String CONFIG_GENERATED = "configGenerated/";
+    private static final String CONFIG_REGENERATED = "configRegenerated/";
+    private static final String TARGET_LANGUAGE_GENERATED = "targetLanguage/";
+    private static final String TARGET_LANGUAGE_SOURCE = "targetSource/";
 
     private static final boolean STORE_ALWAYS_DATA_INTO_FILES = true;
+    private static final boolean COMPARE_EXPECTED_AND_ACTUAL = true;
     private static final boolean LOG_NAMES_ON_SUCCESS = true;
-    public static final String TEST_SPEC_YML = "classpath:/crossCompilerTests/testSpec.yml";
 
     private static JSONObject progDeclsFromTestSpec;
     private static JSONObject robotsFromTestSpec;
 
-    private int errorCount = 0;
-    private int successCount = 0;
+    private int errorCountRegeneration = 0;
+    private int successCountRegeneration = 0;
+    private int errorCountCodeGeneration = 0;
+    private int successCountCodeGeneration = 0;
 
     @BeforeClass
     public static void setup() throws IOException {
@@ -89,31 +92,33 @@ public class ReuseIntegratioAsUnitTest {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
             IRobotFactory testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);
             String defaultConfigXml = testFactory.getConfigurationDefault();
-            String templateUnit = Util.readResourceContent(RESOURCE_BASE_COMMON + "/template/commonAstUnit.xml");
-            LOG.info("testing XML and AST consistency for " + progDeclsFromTestSpec.length() + " common programs");
+            String templateUnit = Util.readResourceContent(CROSS_COMPILER_TESTS + COMMON + "template/commonAstUnit.xml");
+            LOG.info("testing XML and AST_GENERATED consistency for " + progDeclsFromTestSpec.length() + " common programs");
             for ( String progName : programNameArray ) {
-                logStart(progName + " (test of xml regeneration)");
+                String msgSuffix = progName + " (test of xml regeneration)";
+                logStart(msgSuffix);
                 JSONObject progDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(progName);
                 String generatedFragmentXml = generateFinalProgram(templateUnit, progName, progDeclFromTestSpec);
-                boolean regenerationOk = compareGeneratedAndRegeneratedXml(progName, generatedFragmentXml, defaultConfigXml, "common", testFactory);
+                boolean regenerationOk = compareGeneratedAndRegeneratedXml(COMMON, "", progName, generatedFragmentXml, defaultConfigXml, testFactory);
                 if ( regenerationOk ) {
-                    successCount++;
-                    logSucc(progName + " (test of xml regeneration)");
+                    successCountRegeneration++;
+                    logSucc(msgSuffix);
                 } else {
-                    errorCount++;
-                    logFail(progName + " (test of xml regeneration)");
+                    errorCountRegeneration++;
+                    logFail(msgSuffix);
                 }
             }
         }
         {
-            for ( String robotName : ROBOT_NAMES_FOR_TARGET_LANGUAGE_GENERATION ) {
+            for ( String robotName : ROBOTS_FOR_TARGET_LANGUAGE_GENERATION ) {
                 List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
                 IRobotFactory testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
                 JSONObject robotDeclFromTestSpec = robotsFromTestSpec.getJSONObject(robotName);
                 String robotDir = robotDeclFromTestSpec.getString("template");
                 String template = getTemplateWithConfigReplaced(robotDir, robotName);
                 nextProg: for ( String progName : programNameArray ) {
-                    logStart(progName + " (test code generation for " + robotName + ")");
+                    String msgSuffix = progName + " (code generation for " + robotName + ")";
+                    logStart(msgSuffix);
                     JSONObject codeGenProgDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(progName);
                     JSONObject exclude = codeGenProgDeclFromTestSpec.optJSONObject("exclude");
                     if ( exclude != null ) {
@@ -125,24 +130,18 @@ public class ReuseIntegratioAsUnitTest {
                         }
                     }
                     String exportXml = generateFinalProgram(template, progName, codeGenProgDeclFromTestSpec);
-                    boolean codeGenerationOk =
-                        compareGeneratedTargetLanguage(progName, exportXml, "common/" + robotName, testFactory);
+                    boolean codeGenerationOk = compareGeneratedTargetLanguage(COMMON, robotName, progName, exportXml, testFactory);
                     if ( codeGenerationOk ) {
-                        successCount++;
-                        logSucc(progName + " (test code generation for " + robotName + ")");
+                        successCountCodeGeneration++;
+                        logSucc(msgSuffix);
                     } else {
-                        errorCount++;
-                        logFail(progName + " (test code generation for " + robotName + ")");
+                        errorCountCodeGeneration++;
+                        logFail(msgSuffix);
                     }
                 }
             }
         }
-
-        LOG.info("succeeding tests: " + successCount);
-        if ( errorCount > 0 ) {
-            LOG.error("errors found: " + errorCount);
-            Assert.fail("errors found: " + errorCount);
-        }
+        showTestResult();
     }
 
     @Test
@@ -156,127 +155,57 @@ public class ReuseIntegratioAsUnitTest {
             IRobotFactory robotFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
             JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
             final String robotDir = robot.getString("dir");
-            final String resourceDirectory = RESOURCE_BASE_SPECIFIC + robotDir;
+            final String resourceDirectory = CROSS_COMPILER_TESTS + ROBOT_SPECIFIC + robotDir + (robotDir.endsWith("/") ? "" : "/");
             de.fhg.iais.roberta.util.FileUtils.fileStreamOfResourceDirectory(resourceDirectory). //
-                filter(f -> f.endsWith(".xml")).forEach(f -> extractProgramFragmentAndProcessProgramXml(f, robotName, resourceDirectory, robotFactory));
+                filter(f -> f.endsWith(".xml"))
+                .forEach(f -> processRegenerationAndCodeGenerationForRobotSpecificTests(f, robotName, resourceDirectory, robotFactory));
         }
-        LOG.info("succeeding tests: " + successCount);
-        if ( errorCount > 0 ) {
-            LOG.error("errors found: " + errorCount);
-            Assert.fail("errors found: " + errorCount);
-        }
+        showTestResult();
     }
 
-    private void extractProgramFragmentAndProcessProgramXml(
-        String fileNameWithRobotSpecificTestProgram,
-        String robotName,
-        String directoryWithPrograms,
-        IRobotFactory testFactory) //
-    {
-        int index = fileNameWithRobotSpecificTestProgram.lastIndexOf(".xml");
-        Assert.assertTrue(index > 0);
-        String progName = fileNameWithRobotSpecificTestProgram.substring(0, index);
-        if ( "error".equals(progName) ) {
-            LOG.info("ignoring program \"error\"");
-            return;
-        }
-        logStart(robotName + "/" + progName);
-        String programFileName = directoryWithPrograms + "/" + fileNameWithRobotSpecificTestProgram;
-        String exportXmlText = Util.readResourceContent(programFileName);
-        Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXmlText);
-        String programXml = progConfPair.getFirst();
-        String configXml = progConfPair.getSecond();
-        boolean regenerationOk = compareGeneratedAndRegeneratedXml(progName, programXml, configXml, robotName, testFactory);
-        boolean codeGenerationOk = compareGeneratedTargetLanguage(progName, exportXmlText, robotName, testFactory);
-        if ( regenerationOk && codeGenerationOk ) {
-            successCount++;
-            logSucc(robotName + "/" + progName);
-        } else {
-            errorCount++;
-            logFail(robotName + "/" + progName);
-
-        }
-    }
-
-    //
-
-    /**
-     * accept xmlversion 3.1 program and config<br>
-     * - generate code for the test factory supplied (main languages are Java, C++, Python and the SimulationStackMachine<br>
-     * - check that the program generated is the same as the expected one
-     * <br>
-     * if an error is detected, the data is written to the directory 'target/unitTests' for debugging
-     *
-     * @param programName
-     * @param programXml
-     * @param configXml
-     * @param testType either "common" or the name of a robot. Used to select the target directory for storing
-     * @param robotFactory
-     */
-    private boolean compareGeneratedTargetLanguage(String programName, String exportXml, String testType, IRobotFactory robotFactory) //
-    {
-        Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXml);
-        String programXml = progConfPair.getFirst();
-        String configXml = progConfPair.getSecond();
-        Project.Builder builder = UnitTestHelper.setupWithConfigAndProgramXML(robotFactory, programXml, configXml);
-        Project project = builder.build();
-
-        boolean thisUnitTestIsOk = true;
-        try {
-            String msg = UnitTestHelper.executeWorkflow("showsource", robotFactory, project);
-            if ( msg != null ) {
-                LOG.error("showsource workflow failed for " + programName + " with message " + msg);
-                thisUnitTestIsOk = false;
-                storeExportOfXml(programName, testType, programXml, configXml);
-            } else {
-                String generatedProgramSource = project.getSourceCode().toString();
-                if ( STORE_ALWAYS_DATA_INTO_FILES ) {
-                    storeDataIntoFiles(generatedProgramSource, testType + TARGET_LANGUAGE_GENERATED, programName, robotFactory.getSourceCodeFileExtension());
-                    storeExportOfXml(programName, testType, programXml, configXml);
-                }
-            }
-        } catch ( Exception e ) {
-            LOG.error("showsource workflow failed for " + programName + " with Exception " + e.getMessage());
-            thisUnitTestIsOk = true;
-        }
-        return thisUnitTestIsOk;
-    }
-
-    private void storeExportOfXml(String programName, String testType, String programXml, String configXml) {
-        String export = "<?xml version=\"1.0\"?>\n<export xmlns=\"http://de.fhg.iais.roberta.blockly\">\n<program>\n";
-        export += programXml;
-        export += "\n</program>\n<config>\n";
-        export += configXml;
-        export += "\n</config>\n</export>\n";
-        storeDataIntoFiles(export, testType + TARGET_LANGUAGE_SOURCE, programName, "xml");
+    @Test
+    public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
+        String robotName = "unowifirev2";
+        String programName = "text_colours_functions";
+        LOG.info("testing program " + programName + " for robot " + robotName);
+        LOG.info("========= processing robot: " + robotName);
+        List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
+        IRobotFactory robotFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
+        JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
+        final String robotDir = robot.getString("dir");
+        final String resourceDirectory = CROSS_COMPILER_TESTS + ROBOT_SPECIFIC + robotDir + (robotDir.endsWith("/") ? "" : "/");
+        processRegenerationAndCodeGenerationForRobotSpecificTests(programName + ".xml", robotName, resourceDirectory, robotFactory);
+        showTestResult();
     }
 
     /**
      * accept xmlversion 3.1 program and config<br>
-     * - generate the AST and compare it with the expected one (compare has to be implemented)
+     * - generate the AST_GENERATED and compare it with the expected one (compare has to be implemented)
      * - generate the program and config ast embedded in a Project object.<br>
      * - from this Project object regenerate the program and config XML ("backtransformation")<br>
      * - check that the original and regenerated program are similar using XmlUnit<br>
      * - check that the original and regenerated config are similar using XmlUnit (deactivated, because they are VERY different<br>
-     * 
+     *
+     * @param directory common or robotSpecific
+     * @param robotName may be "" for common tests
      * @param programName
      * @param programXml
      * @param configXml
-     * @param testType
      * @param robotFactory
      * @return true, if everything went fine
      */
-    private boolean compareGeneratedAndRegeneratedXml(String programName, String programXml, String configXml, String testType, IRobotFactory robotFactory) //
+    private boolean compareGeneratedAndRegeneratedXml(String directory, String robotName, String programName, String programXml, String configXml, IRobotFactory robotFactory) //
     {
         if ( programName.equals("error") ) {
             LOG.info("ignoring program error");
             return false;
         }
+        String robotSubDirectory = robotName.equals("") ? "" : robotName + "/";
         BlockSet blockSet = null;
         try {
             blockSet = JaxbHelper.xml2BlockSet(programXml);
         } catch ( JAXBException e ) {
-            LOG.error("invalid program (AST could not be generated)" + programName);
+            LOG.error("invalid program (AST_GENERATED could not be generated)" + programName);
             return false;
         }
         if ( !"3.1".equals(blockSet.getXmlversion()) ) {
@@ -290,20 +219,30 @@ public class ReuseIntegratioAsUnitTest {
         for ( int i = 2; i < blocks.size(); i++ ) {
             sb.append(blocks.get(i).toString()).append("\n");
         }
+        String generatedAstAsString = sb.toString();
         if ( STORE_ALWAYS_DATA_INTO_FILES ) {
-            storeDataIntoFiles(sb.toString(), testType + AST, programName, "ast");
+            storeDataIntoFiles(directory + AST_GENERATED, robotSubDirectory, programName, generatedAstAsString, "ast");
         }
 
+        boolean thisUnitTestIsOk = true;
+
+        if ( COMPARE_EXPECTED_AND_ACTUAL ) {
+            thisUnitTestIsOk = compareExpectedToGenerated(CROSS_COMPILER_TESTS + directory + EXPECTED + AST_GENERATED + robotSubDirectory, programName, generatedAstAsString, "ast");
+        }
         Project.Builder builder = UnitTestHelper.setupWithConfigAndProgramXML(robotFactory, programXml, configXml);
         Project project = builder.build();
 
         String regeneratedProgramXml = project.getAnnotatedProgramAsXml();
         String regeneratedConfigXml = project.getAnnotatedConfigurationAsXml();
 
-        String diffProg = UnitTestHelper.runXmlUnit(programXml, regeneratedProgramXml);
-        // String diffConfig = UnitTestHelper.runXmlUnit(configXml, regeneratedConfigXml);
+        String diffProg;
+        if ( COMPARE_EXPECTED_AND_ACTUAL ) {
+            diffProg = UnitTestHelper.runXmlUnit(programXml, regeneratedProgramXml);
+            // String diffConfig = UnitTestHelper.runXmlUnit(configXml, regeneratedConfigXml);
+        } else {
+            diffProg = null; // simulate ok
+        }
 
-        boolean thisUnitTestIsOk = true;
         if ( diffProg != null ) { // || diffConfig != null
             if ( diffProg != null ) {
                 LOG.error(diffProg);
@@ -314,13 +253,136 @@ public class ReuseIntegratioAsUnitTest {
             thisUnitTestIsOk = false;
         }
         if ( STORE_ALWAYS_DATA_INTO_FILES || !thisUnitTestIsOk ) {
-            storeDataIntoFiles(programXml, testType + PROG_GENERATED, programName, "xml");
-            storeDataIntoFiles(regeneratedProgramXml, testType + PROG_REGENERATED, programName, "xml");
+            storeDataIntoFiles(directory + PROG_GENERATED, robotSubDirectory, programName, programXml, "xml");
+            storeDataIntoFiles(directory + PROG_REGENERATED, robotSubDirectory, programName, regeneratedProgramXml, "xml");
 
-            storeDataIntoFiles(configXml, testType + CONFIG_GENERATED, programName, "xml");
-            storeDataIntoFiles(regeneratedConfigXml, testType + CONFIG_REGENERATED, programName, "xml");
+            storeDataIntoFiles(directory + CONFIG_GENERATED, robotSubDirectory, programName, configXml, "xml");
+            storeDataIntoFiles(directory + CONFIG_REGENERATED, robotSubDirectory, programName, regeneratedConfigXml, "xml");
         }
         return thisUnitTestIsOk;
+    }
+
+    private void processRegenerationAndCodeGenerationForRobotSpecificTests(
+        String fileNameWithRobotSpecificTestProgram,
+        String robotName,
+        String directoryWithPrograms,
+        IRobotFactory testFactory) //
+    {
+        int index = fileNameWithRobotSpecificTestProgram.lastIndexOf(".xml");
+        Assert.assertTrue(index > 0);
+        String progName = fileNameWithRobotSpecificTestProgram.substring(0, index);
+        if ( "error".equals(progName) ) {
+            LOG.info("ignoring program \"error\"");
+            return;
+        }
+        String msgSuffix = robotName + "/" + progName;
+        logStart("regeneration and code generation for " + msgSuffix);
+        String programFileName = directoryWithPrograms + fileNameWithRobotSpecificTestProgram;
+        String exportXmlText = Util.readResourceContent(programFileName);
+        Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXmlText);
+        String programXml = progConfPair.getFirst();
+        String configXml = progConfPair.getSecond();
+        boolean regenerationOk = compareGeneratedAndRegeneratedXml(ROBOT_SPECIFIC, robotName, progName, programXml, configXml, testFactory);
+        if ( regenerationOk ) {
+            successCountRegeneration++;
+            logSucc("regeneration " + msgSuffix);
+        } else {
+            errorCountRegeneration++;
+            logFail("regeneration " + msgSuffix);
+        }
+        boolean codeGenerationOk = compareGeneratedTargetLanguage(ROBOT_SPECIFIC, robotName, progName, exportXmlText, testFactory);
+        if ( codeGenerationOk ) {
+            successCountCodeGeneration++;
+            logSucc("code generation " + msgSuffix);
+        } else {
+            errorCountCodeGeneration++;
+            logFail("code generation " + msgSuffix);
+
+        }
+    }
+
+    /**
+     * accept xmlversion 3.1 program and config<br>
+     * - generate code for the test factory supplied (main languages are Java, C++, Python and the SimulationStackMachine<br>
+     * - check that the program generated is the same as the expected one
+     * <br>
+     * if an error is detected, the data is written to the directory 'target/unitTests' for debugging
+     *
+     * @param directory Used to select the target directory for storing
+     * @param programXml
+     * @param configXml
+     * @param programName
+     * @param robotFactory
+     */
+    private boolean compareGeneratedTargetLanguage(String directory, String robotName, String programName, String exportXml, IRobotFactory robotFactory) //
+    {
+        Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXml);
+        String programXml = progConfPair.getFirst();
+        String configXml = progConfPair.getSecond();
+        Project.Builder builder = UnitTestHelper.setupWithConfigAndProgramXML(robotFactory, programXml, configXml);
+        Project project = builder.build();
+
+        boolean thisUnitTestIsOk;
+        try {
+            String msg = UnitTestHelper.executeWorkflow("showsource", robotFactory, project);
+            if ( msg != null ) {
+                LOG.error("showsource workflow failed for " + programName + " with message " + msg);
+                thisUnitTestIsOk = false;
+                storeExportOfXml(directory, programName, robotName, programXml, configXml);
+            } else {
+                String generatedProgramSource = project.getSourceCode().toString();
+                thisUnitTestIsOk =
+                    compareExpectedToGenerated(
+                        CROSS_COMPILER_TESTS + directory + EXPECTED + TARGET_LANGUAGE_GENERATED + robotName + "/",
+                        programName,
+                        generatedProgramSource,
+                        robotFactory.getSourceCodeFileExtension());
+                if ( STORE_ALWAYS_DATA_INTO_FILES || !thisUnitTestIsOk ) {
+                    storeExportOfXml(directory, programName, robotName, programXml, configXml);
+                    storeDataIntoFiles(
+                        directory + TARGET_LANGUAGE_GENERATED, robotName,
+                        programName,
+                        generatedProgramSource,
+                        robotFactory.getSourceCodeFileExtension());
+                }
+            }
+        } catch ( Exception e ) {
+            LOG.error("showsource workflow failed for " + programName + " with Exception " + e.getMessage());
+            thisUnitTestIsOk = false;
+        }
+        return thisUnitTestIsOk;
+    }
+
+    private void showTestResult() {
+        LOG.info("succeeding regeneration tests: " + successCountRegeneration);
+        if ( errorCountRegeneration > 0 ) {
+            LOG.error("regeneration errors found: " + errorCountRegeneration);
+        }
+        LOG.info("succeeding code generation tests: " + successCountCodeGeneration);
+        if ( errorCountCodeGeneration > 0 ) {
+            LOG.error("code generation errors found: " + errorCountCodeGeneration);
+        }
+        Assert.assertTrue("test errors found", errorCountRegeneration + errorCountCodeGeneration == 0);
+    }
+
+    private static boolean compareExpectedToGenerated(String resourceBase, String programName, String generated, String extension) {
+        if (COMPARE_EXPECTED_AND_ACTUAL) {
+            String expectedProgramSource;
+            try {
+                expectedProgramSource = Util.readResourceContent(resourceBase + programName + "." + extension);
+                expectedProgramSource = expectedProgramSource.replaceAll("\\s+", ""); // TODO: python indentation is lost - refactor this
+                boolean equals = generated.replaceAll("\\s+", "").equals(expectedProgramSource);
+                if (!equals) {
+                    LOG.error("generated and expected differ for " + programName + "." + extension);
+                }
+                return equals;
+            } catch ( Exception e ) {
+                LOG.error("expected " + resourceBase + programName + "." + extension + " could not be read");
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     private static String generateFinalProgram(String template, String progName, JSONObject progDeclFromTestSpec) {
@@ -338,7 +400,7 @@ public class ReuseIntegratioAsUnitTest {
     }
 
     private static String getTemplateWithConfigReplaced(String robotDir, String robotName) {
-        String template = Util.readResourceContent(RESOURCE_BASE_COMMON + "template/" + robotDir + ".xml");
+        String template = Util.readResourceContent(CROSS_COMPILER_TESTS + COMMON + "template/" + robotDir + ".xml");
         Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
         String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
         String defaultConfig = Util.readResourceContent(defaultConfigurationURI);
@@ -348,16 +410,26 @@ public class ReuseIntegratioAsUnitTest {
 
     private static String read(String directoryName, String progNameWithXmlSuffix) {
         try {
-            return Util.readResourceContent(RESOURCE_BASE_COMMON + directoryName + "/" + progNameWithXmlSuffix);
+            return Util.readResourceContent(CROSS_COMPILER_TESTS + COMMON + directoryName + "/" + progNameWithXmlSuffix);
         } catch ( Exception e ) {
             // this happens, if no decl or fragment is available for the program given. This is legal.
             return null;
         }
     }
 
-    public static void storeDataIntoFiles(String source, String directory, String programName, String suffix) {
+    private static void storeExportOfXml(String directory, String programName, String robotName, String programXml, String configXml) {
+        String export = "<?xml version=\"1.0\"?>\n<export xmlns=\"http://de.fhg.iais.roberta.blockly\">\n<program>\n";
+        export += programXml;
+        export += "\n</program>\n<config>\n";
+        export += configXml;
+        export += "\n</config>\n</export>\n";
+        storeDataIntoFiles(directory + TARGET_LANGUAGE_SOURCE,robotName, programName, export, "xml");
+    }
+
+    private static void storeDataIntoFiles(String directory, String robotName, String programName, String source, String suffix) {
         try {
-            String filename = TARGET_DIR + "/" + directory + "/" + programName + "." + suffix;
+            String robotSubDirectory = robotName.equals("") ? "" : robotName + "/";
+            String filename = TARGET_DIR + directory + robotSubDirectory + programName + "." + suffix;
             if ( "xml".equals(suffix) ) {
                 prettyPrintXml(source, filename);
             } else {
@@ -368,7 +440,7 @@ public class ReuseIntegratioAsUnitTest {
         }
     }
 
-    public static void prettyPrintXml(String xmlString, String filename) throws Exception {
+    private static void prettyPrintXml(String xmlString, String filename) throws Exception {
         File file = new File(filename);
         file.getParentFile().mkdirs();
         file.createNewFile(); // if file already exists will do nothing
@@ -389,19 +461,19 @@ public class ReuseIntegratioAsUnitTest {
         }
     }
 
-    public static void logStart(String msg) {
+    private static void logStart(String msg) {
         if ( LOG_NAMES_ON_SUCCESS ) {
             LOG.info("=== program " + msg);
         }
     }
 
-    public static void logSucc(String msg) {
+    private static void logSucc(String msg) {
         if ( LOG_NAMES_ON_SUCCESS ) {
             LOG.info("+++ program " + msg);
         }
     }
 
-    public static void logFail(String msg) {
-        LOG.info("--- program " + msg);
+    private static void logFail(String msg) {
+        LOG.info("--- FAIL program " + msg);
     }
 }
