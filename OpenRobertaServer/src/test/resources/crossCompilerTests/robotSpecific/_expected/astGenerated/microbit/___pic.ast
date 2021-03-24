@@ -1,0 +1,3 @@
+DisplayImageAction [IMAGE, PredefinedImage [HAPPY]]
+WaitTimeStmt [time=NumConst [1000]]
+DisplayImageAction [IMAGE, PredefinedImage [HEART]]

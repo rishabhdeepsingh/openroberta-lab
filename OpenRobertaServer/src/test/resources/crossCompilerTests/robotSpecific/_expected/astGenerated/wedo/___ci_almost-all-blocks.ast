@@ -1,0 +1,30 @@
+MotorOnAction [M, MotionParam [speed=NumConst [30], duration=MotorDuration [type=null, value=NumConst [1000]]]]
+MotorOnAction [M, MotionParam [speed=NumConst [30], duration=null]]
+WaitTimeStmt [time=NumConst [500]]
+MotorStop [port=M]
+ClearDisplayAction []
+PlayNoteAction [ duration=2000, frequency=261.626]
+ToneAction [NumConst [300], NumConst [100]]
+LightAction [LED, DEFAULT, DEFAULT, ColorConst [#ff0000]]
+WaitTimeStmt [time=NumConst [500]]
+LightStatusAction [LED, RESET]
+TimerSensor [1, RESET, NO_SLOT]
+WaitTimeStmt [time=NumConst [500]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [InfraredSensor [IRS, DISTANCE, EMPTY_SLOT]]], NumConst [10]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]], NumConst [500]]]
+)]
+WaitStmt [
+(repeat [WAIT, SensorExpr [GyroSensor [KR, TILTED, UP]]]
+)]
+WaitStmt [
+(repeat [WAIT, SensorExpr [KeysSensor [B, PRESSED, EMPTY_SLOT]]]
+)]
+
+StmtTextComment [conditionals and loops are covered elsewhere]
+
+Var [s] := FunctionExpr [TextJoinFunct [StringConst [s enthält ], Var [s]]]
+
+ShowTextAction [Var [s], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]

@@ -1,0 +1,24 @@
+
+Var [result] := FunctionExpr [MathOnListFunct [SUM, [Var [array2]]]]
+
+
+Var [result] := Binary [MULTIPLY, Var [result], FunctionExpr [ListGetIndex [GET, FROM_START, [Var [array2], NumConst [3]]]]]
+
+ListSetIndex [SET, FROM_START, [Var [array2], NumConst [1], NumConst [4]]]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MAX, [Var [array2]]]]]
+
+
+Var [result] := Binary [MULTIPLY, Var [result], FunctionExpr [IndexOfFunct [FIRST, [Var [array2], NumConst [3]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct [LAST, [Var [array2], NumConst [1]]]]]
+
+ListSetIndex [SET, FROM_END, [Var [array2], NumConst [5], NumConst [3]]]
+ListSetIndex [SET, FIRST, [Var [array2], NumConst [6]]]
+ListSetIndex [SET, LAST, [Var [array2], NumConst [7]]]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [AVERAGE, [Var [array2]]]]]
+
+ShowTextAction [Var [result], NumConst [0], NumConst [1]]
+WaitTimeStmt [time=NumConst [2500]]

@@ -1,0 +1,6 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [MotorOnAction [S, MotionParam [speed=NumConst [90], duration=null]]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [T, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+)

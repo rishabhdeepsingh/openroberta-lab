@@ -1,0 +1,20 @@
+SetLanguage [ENGLISH]
+
+(repeat [FOREVER, BoolConst [true]]
+Var [word] := SensorExpr [RecognizeWord [Var [item]]]
+
+if Binary [EQ, StringConst [Hello], Var [word]]
+,then
+AktionStmt [SayTextAction [StringConst [Hi], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+,else if Binary [EQ, StringConst [Goodbye], Var [word]]
+,then
+AktionStmt [SayTextAction [StringConst [See you], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+,else if Binary [EQ, StringConst [Wave], Var [word]]
+,then
+AktionStmt [Animation [WAVE]]
+,else if Binary [EQ, StringConst [Quit], Var [word]]
+,then
+AktionStmt [SayTextAction [StringConst [quitting], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+StmtFlowCon [BREAK]
+WaitTimeStmt [time=NumConst [500]]
+)

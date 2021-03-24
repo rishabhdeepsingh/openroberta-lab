@@ -1,0 +1,55 @@
+
+StmtTextComment [Action]
+MotorOnAction [LMOTOR, MotionParam [speed=NumConst [23], duration=null]]
+MotorOnAction [LMOTOR, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]
+
+StmtTextComment [Math operations]
+
+Var [tempnum] := FunctionExpr [MathSingleFunct [POW10, [NumConst [10]]]]
+
+
+Var [tempnum] := FunctionExpr [MathSingleFunct [ABS, [NumConst [40]]]]
+
+
+Var [tempnum] := FunctionExpr [MathSingleFunct [ROUND, [NumConst [40]]]]
+
+
+Var [tempnum] := FunctionExpr [MathSingleFunct [ROUNDUP, [NumConst [60]]]]
+
+
+Var [tempnum] := FunctionExpr [MathSingleFunct [ROUNDDOWN, [NumConst [80]]]]
+
+
+StmtTextComment [Math logic]
+
+Var [tempbool] := FunctionExpr [MathNumPropFunct [EVEN, [NumConst [7]]]]
+
+
+Var [tempbool] := FunctionExpr [MathNumPropFunct [ODD, [NumConst [7]]]]
+
+
+Var [tempbool] := FunctionExpr [MathNumPropFunct [PRIME, [NumConst [7]]]]
+
+
+Var [tempbool] := FunctionExpr [MathNumPropFunct [POSITIVE, [NumConst [7]]]]
+
+
+Var [tempbool] := FunctionExpr [MathNumPropFunct [NEGATIVE, [NumConst [7]]]]
+
+
+Var [tempbool] := FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [NumConst [7], NumConst [6]]]]
+
+
+StmtTextComment [Lists]
+
+Var [tempnum] := FunctionExpr [MathOnListFunct [SUM, [Var [testlist]]]]
+
+
+Var [tempnum] := FunctionExpr [MathOnListFunct [MIN, [Var [testlist]]]]
+
+
+Var [tempnum] := FunctionExpr [MathOnListFunct [MAX, [Var [testlist]]]]
+
+
+Var [tempnum] := FunctionExpr [MathOnListFunct [AVERAGE, [Var [testlist]]]]
+

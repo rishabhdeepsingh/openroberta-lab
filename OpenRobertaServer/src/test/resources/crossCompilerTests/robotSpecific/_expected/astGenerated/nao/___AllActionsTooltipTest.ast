@@ -1,0 +1,37 @@
+ApplyPosture [REST]
+SetStiffness [BODY, ON]
+SetStiffness [, ON]
+Hand [RIGHT, ACTIVE]
+MoveJoint [HEADYAW, ABSOLUTE, NumConst [10]]
+WalkDistance [FOREWARD, NumConst [20]]
+TurnDegrees [LEFT, NumConst [20]]
+WalkTo [NumConst [0], NumConst [0], NumConst [0]]
+WalkTo [NumConst [0], NumConst [0], NumConst [0]]
+Stop []
+Animation [TAICHI]
+PointLookAt [TORSO, POINT, NumConst [0], NumConst [0], NumConst [0], NumConst [0]]
+SetVolume [NumConst [50]]
+
+Var [item] := ActionExpr [Get Volume []]
+
+SetLanguage [GERMAN]
+
+Var [item2] := ActionExpr [Get Language []]
+
+SayTextAction [StringConst [Hallo], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+SayTextAction [StringConst [Hallo], NumConst [30], NumConst [30]]
+PlayFile [StringConst [Roberta]]
+TakePicture [TOP, StringConst [RobertaPicture]]
+RecordVideo [LOW, TOP, NumConst [5], StringConst [RobertaVideo]]
+
+Var [item3] := ActionExpr [LearnFace [StringConst [Roberta]]]
+
+
+Var [item3] := ActionExpr [ForgetFace [StringConst [Roberta]]]
+
+SetLeds [EYES, ColorConst [#ff0000], ]
+SetLeds [EARS, NumConst [50], ]
+LedOff [led=EYES]
+LedReset [led=EYES]
+RandomEyesDuration [NumConst [2000]]
+RastaDuration [NumConst [2000]]

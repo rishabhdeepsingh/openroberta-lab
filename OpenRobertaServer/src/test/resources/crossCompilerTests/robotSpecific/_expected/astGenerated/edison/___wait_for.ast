@@ -1,0 +1,27 @@
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [PLAY, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [IRSeekerSensor [IRLED, RCCODE, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [LLIGHT, LIGHT, EMPTY_SLOT]]], NumConst [50]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [RLIGHT, LIGHT, EMPTY_SLOT]]], NumConst [50]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [LINETRACKER, LIGHT, EMPTY_SLOT]]], NumConst [50]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [SoundSensor [TOP, SOUND, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [InfraredSensor [LEFT, OBSTACLE, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [InfraredSensor [RIGHT, OBSTACLE, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [InfraredSensor [FRONT, OBSTACLE, EMPTY_SLOT]]], BoolConst [true]]]
+)]

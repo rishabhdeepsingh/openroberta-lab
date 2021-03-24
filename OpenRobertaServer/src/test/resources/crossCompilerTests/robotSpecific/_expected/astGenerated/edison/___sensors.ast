@@ -1,0 +1,4 @@
+ResetSensor[OBSTACLEDETECTOR]
+ResetSensor[KEYPAD]
+ResetSensor[SOUND]
+ResetSensor[RCCODE]

@@ -1,0 +1,4 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [PinWriteValueSensor [StringConst [Hallo]]]
+)

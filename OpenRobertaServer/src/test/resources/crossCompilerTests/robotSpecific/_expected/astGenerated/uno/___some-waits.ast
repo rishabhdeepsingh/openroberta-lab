@@ -1,0 +1,11 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [T, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]], NumConst [500]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [TemperatureSensor [T2, TEMPERATURE, EMPTY_SLOT]]], NumConst [20]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [U, DISTANCE, EMPTY_SLOT]]], NumConst [30]]]
+)]
+)

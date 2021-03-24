@@ -1,0 +1,129 @@
+
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [true]
+,then
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [true]
+,then
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [false]
+,then
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [false]
+,then
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [true]
+,then
+if BoolConst [true]
+,then
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+,else if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+,else
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+,else if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+
+
+if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+,else if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+
+
+if BoolConst [false]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+,else if BoolConst [true]
+,then
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+,else
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+

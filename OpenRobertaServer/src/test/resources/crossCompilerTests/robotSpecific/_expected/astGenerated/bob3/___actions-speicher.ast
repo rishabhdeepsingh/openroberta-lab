@@ -1,0 +1,5 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [RememberAction [ ]]
+exprStmt Binary [MATH_CHANGE, Var [counter], ActionExpr [RecallAction [ ]]]
+)

@@ -1,0 +1,148 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "fuenf",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 8
+  },
+  {
+    "opc": "expr",
+    "name": "fuenf",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 12
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "fuenf",
+    "expr": "Var"
+  },
+  {"opc": "ShowTextAction"},
+  {"opc": "stop"},
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "n",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodIfReturn"
+  },
+  {
+    "opc": "expr",
+    "name": "n",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "LTE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 21
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 31
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "fuenf"
+  },
+  {
+    "opc": "expr",
+    "name": "n",
+    "expr": "Var"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 30
+  },
+  {
+    "opc": "expr",
+    "name": "n",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 12
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "n"
+  },
+  {
+    "opc": "return",
+    "values": true
+  }
+]}

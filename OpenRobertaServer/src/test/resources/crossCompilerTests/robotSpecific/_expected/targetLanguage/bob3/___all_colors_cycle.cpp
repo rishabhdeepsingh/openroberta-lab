@@ -1,0 +1,43 @@
+#include "bob3.h" 
+Bob3 rob;
+
+
+
+void setup()
+{
+    
+}
+
+void loop()
+{
+    rob.setLed(EYE_2, RGB(0x00, 0x00, 0x00));
+    rob.setLed(EYE_1, RGB(0x00, 0x00, 0xff));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0x22, 0x88, 0x22));
+    rob.setLed(EYE_1, RGB(0x44, 0x66, 0xee));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0x44, 0x88, 0xaa));
+    rob.setLed(EYE_1, RGB(0x66, 0x33, 0xaa));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0x66, 0x99, 0xee));
+    rob.setLed(EYE_1, RGB(0x55, 0xff, 0x99));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0x00, 0xFF, 0x00));
+    rob.setLed(EYE_1, RGB(0x77, 0xff, 0xdd));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0x00, 0xFF, 0xFF));
+    rob.setLed(EYE_2, RGB(0xdd, 0x44, 0x22));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0xFF, 0x00, 0x00));
+    rob.setLed(EYE_2, RGB(0xff, 0x00, 0x88));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0xFF, 0x00, 0xFF));
+    rob.setLed(EYE_2, RGB(0xff, 0x77, 0x55));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0xff, 0x88, 0x00));
+    rob.setLed(EYE_2, RGB(0xFF, 0xFF, 0xFF));
+    delay(500);
+    rob.setLed(EYE_2, RGB(0xFF, 0xFF, 0x00));
+    rob.setLed(EYE_2, RGB(0xFF, 0xFF, 0x00));
+    delay(4000);
+}

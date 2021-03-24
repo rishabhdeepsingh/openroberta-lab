@@ -1,0 +1,54 @@
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [1, PRESSED, 1]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [NO_PORT, UP, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [NO_PORT, DOWN, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [NO_PORT, FACE_DOWN, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [NO_PORT, FACE_UP, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [NO_PORT, SHAKE, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [NO_PORT, FREEFALL, EMPTY_SLOT]]], BoolConst [true]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [CompassSensor [C, ANGLE, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, 1]]], NumConst [500]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [CompassSensor [C, ANGLE, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, 1]]], NumConst [500]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [TemperatureSensor [TM, TEMPERATURE, EMPTY_SLOT]]], NumConst [20]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [PinGetValueSensor [S_0_A, ANALOG, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [PinGetValueSensor [S_0_D, DIGITAL, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [PinGetValueSensor [S_0_D, PULSEHIGH, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [PinGetValueSensor [S_0_D, PULSELOW, EMPTY_SLOT]]], NumConst [30]]]
+)]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [AccelerometerSensor [Acc, DEFAULT, X]]], NumConst [512]]]
+)]

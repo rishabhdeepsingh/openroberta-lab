@@ -1,0 +1,36 @@
+
+(repeat [FOREVER, BoolConst [true]]
+AktionStmt [ShowTextAction [NumConst [0], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+StmtFlowCon [BREAK]
+)
+
+(repeat [UNTIL, Unary [NOT, Binary [NEQ, NumConst [0], NumConst [0]]]]
+AktionStmt [ShowTextAction [NumConst [1], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+StmtFlowCon [BREAK]
+)
+
+(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]
+AktionStmt [ShowTextAction [NumConst [2], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+StmtFlowCon [BREAK]
+)
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [3], NumConst [1]]
+AktionStmt [ShowTextAction [NumConst [3], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+StmtFlowCon [CONTINUE]
+)
+
+(repeat [TIMES, Var [k1], NumConst [0], NumConst [4], NumConst [1]]
+AktionStmt [ShowTextAction [NumConst [4], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+)
+
+(repeat [FOR, Var [i], Binary [ADD, NumConst [0], NumConst [0]], Binary [ADD, NumConst [4], NumConst [2]], Binary [ADD, NumConst [1], NumConst [0]]]
+AktionStmt [ShowTextAction [Var [i], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+StmtFlowCon [CONTINUE]
+)
+WaitStmt [
+(repeat [WAIT, Binary [EQ, NumConst [8], NumConst [0]]]
+AktionStmt [ShowTextAction [NumConst [8], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+)
+(repeat [WAIT, Binary [EQ, NumConst [9], NumConst [9]]]
+AktionStmt [ShowTextAction [NumConst [9], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+)]

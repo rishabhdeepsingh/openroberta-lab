@@ -1,0 +1,7 @@
+MethodCall [text, , , VOID]
+MethodCall [colour, , , VOID]
+MethodCall [parameters, Var [x], Var [x2], Var [x3], Var [x4], Var [numVar], Var [boolVar], Var [stringVar], Var [colourVar], VOID]
+ShowTextAction [MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+ShowTextAction [MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+ShowTextAction [MethodExpr [MethodCall [function_return_stringVar, , , STRING]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+ShowTextAction [MethodExpr [MethodCall [function_return_colourVar, , , COLOR]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]

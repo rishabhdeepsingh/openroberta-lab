@@ -1,0 +1,4 @@
+MethodCall [math, Var [x], NumConst [0], VOID]
+MethodCall [aktionKontrolle, , , VOID]
+MethodCall [tastenKontrolle, , , VOID]
+MethodCall [sensoren, , , VOID]

@@ -1,0 +1,295 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "x",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "s"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "s",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "30"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "motorOnAction",
+    "speedOnly": false,
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "motorStop",
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "30"
+  },
+  {
+    "opc": "motorOnAction",
+    "speedOnly": true,
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "500"
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "motorStop",
+    "port": "1",
+    "name": "W"
+  },
+  {"opc": "ClearDisplay"},
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "261.626"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2000"
+  },
+  {
+    "opc": "ToneAction",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "300"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "ToneAction",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 9
+  },
+  {
+    "opc": "ledOnAction",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "500"
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "statusLightAction",
+    "name": "W"
+  },
+  {
+    "opc": "createResetTimer",
+    "port": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "500"
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "infrared",
+    "opc": "GetSample",
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 34
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 37
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 28
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "timer",
+    "opc": "GetSample",
+    "port": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "500"
+  },
+  {
+    "op": "GT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 43
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 46
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 37
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "gyro",
+    "mode": "UP",
+    "opc": "GetSample",
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 50
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 53
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 46
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "buttons",
+    "opc": "GetSample",
+    "name": "W"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 57
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 60
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 53
+  },
+  {
+    "opc": "comment",
+    "value": "conditionals and loops are covered elsewhere"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "s enthält "
+  },
+  {
+    "opc": "expr",
+    "name": "s",
+    "expr": "Var"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "s"
+  },
+  {
+    "opc": "expr",
+    "name": "s",
+    "expr": "Var"
+  },
+  {"opc": "ShowTextAction"},
+  {"opc": "stop"}
+]}

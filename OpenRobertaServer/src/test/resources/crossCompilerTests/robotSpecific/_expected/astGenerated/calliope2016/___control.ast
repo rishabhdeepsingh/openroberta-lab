@@ -1,0 +1,101 @@
+
+if Binary [NEQ, Var [r1], NumConst [0]]
+,then
+Var [b1] := Binary [AND, Var [b1], BoolConst [false]]
+
+
+
+if Binary [EQ, Var [r1], NumConst [1]]
+,then
+Var [b1] := Binary [AND, Var [b1], BoolConst [false]]
+
+,else
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+
+
+if Binary [NEQ, Var [r1], NumConst [1]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+,else
+Var [b1] := Binary [AND, Var [b1], BoolConst [false]]
+
+
+
+if Binary [EQ, Var [r1], NumConst [1]]
+,then
+Var [b1] := Binary [AND, Var [b1], BoolConst [false]]
+
+,else if Binary [EQ, Var [r1], NumConst [2]]
+,then
+Var [b1] := Binary [AND, Var [b1], BoolConst [false]]
+
+,else
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+
+
+Var [i] := NumConst [0]
+
+
+(repeat [FOREVER, BoolConst [true]]
+exprStmt Binary [MATH_CHANGE, Var [i], NumConst [1]]
+if Binary [EQ, Var [i], NumConst [2]]
+,then
+StmtFlowCon [CONTINUE]
+
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+if Binary [GTE, Var [i], NumConst [4]]
+,then
+StmtFlowCon [BREAK]
+
+)
+
+Var [i] := NumConst [0]
+
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [4], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [i], NumConst [1]]
+if Binary [GTE, Var [i], NumConst [2]]
+,then
+StmtFlowCon [CONTINUE]
+
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+)
+
+Var [i] := NumConst [0]
+
+
+(repeat [WHILE, Binary [LT, Var [i], NumConst [4]]]
+exprStmt Binary [MATH_CHANGE, Var [i], NumConst [1]]
+if Binary [GT, Var [i], NumConst [2]]
+,then
+StmtFlowCon [CONTINUE]
+
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+)
+
+(repeat [FOR, Var [j], NumConst [0], NumConst [6], NumConst [2]]
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+)
+
+(repeat [FOREVER, BoolConst [true]]
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+(repeat [FOREVER, BoolConst [true]]
+StmtFlowCon [BREAK]
+)
+exprStmt Binary [MATH_CHANGE, Var [r2], NumConst [1]]
+StmtFlowCon [BREAK]
+)
+WaitTimeStmt [time=NumConst [500]]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, 1]]], NumConst [500]]]
+)]
+
+Var [c1] := StmtExpr [
+if Binary [AND, Var [b1], Binary [EQ, Var [r2], NumConst [14]]]
+,then
+exprStmt ColorConst [#006600]
+,else
+exprStmt ColorConst [#ff0000]
+]
+
+LedOnAction [ R, Var [c1] ]

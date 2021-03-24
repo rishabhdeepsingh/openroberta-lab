@@ -1,0 +1,12 @@
+
+Var [item] := SensorExpr [HTColorSensor [3, COLOUR, EMPTY_SLOT]]
+
+
+Var [item2] := SensorExpr [HTColorSensor [3, LIGHT, EMPTY_SLOT]]
+
+
+Var [item2] := SensorExpr [HTColorSensor [3, AMBIENTLIGHT, EMPTY_SLOT]]
+
+
+Var [item3] := SensorExpr [HTColorSensor [3, RGB, EMPTY_SLOT]]
+

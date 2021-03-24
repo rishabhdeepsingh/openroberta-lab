@@ -1,0 +1,12 @@
+
+(repeat [WHILE, Binary [LT, Var [x], NumConst [2]]]
+AktionStmt [ShowTextAction [Var [x], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+Var [x] := Binary [ADD, Var [x], NumConst [1]]
+
+)
+
+(repeat [UNTIL, Unary [NOT, Binary [GT, Var [x], NumConst [3]]]]
+AktionStmt [ShowTextAction [Var [x], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+Var [x] := Binary [ADD, Var [x], NumConst [1]]
+
+)

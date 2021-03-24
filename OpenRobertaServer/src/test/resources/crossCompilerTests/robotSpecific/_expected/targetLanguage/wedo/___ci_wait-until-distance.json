@@ -1,0 +1,53 @@
+{"ops": [
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "infrared",
+    "opc": "GetSample",
+    "port": "1",
+    "name": "w1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 6
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 9
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 0
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 9
+  },
+  {
+    "opc": "ledOnAction",
+    "name": "w1"
+  },
+  {"opc": "stop"}
+]}

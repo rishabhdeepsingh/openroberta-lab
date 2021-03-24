@@ -1,0 +1,4 @@
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [10], NumConst [1]]
+AktionStmt [DriveAction [FOREWARD, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]
+)

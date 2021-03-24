@@ -1,0 +1,26 @@
+SayTextAction [StringConst [Hi], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+SayTextAction [StringConst [Begin volume test], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [10], NumConst [1]]
+AktionStmt [SetVolume [Var [volume]]]
+Var [volume] := Binary [ADD, Var [volume], NumConst [10]]
+
+AktionStmt [SayTextAction [FunctionExpr [TextJoinFunct [StringConst [Setting volume to], Var [volume]]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+)
+SayTextAction [StringConst [Volume test complete], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+SayTextAction [StringConst [Begin speed and pitch test], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+
+(repeat [TIMES, Var [k1], NumConst [0], NumConst [4], NumConst [1]]
+Var [speed] := Binary [ADD, Var [speed], NumConst [25]]
+
+AktionStmt [SayTextAction [FunctionExpr [TextJoinFunct [StringConst [Setting speed to], Var [speed]]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+(repeat [TIMES, Var [k2], NumConst [0], NumConst [4], NumConst [1]]
+Var [pitch] := Binary [ADD, Var [pitch], NumConst [25]]
+
+AktionStmt [SayTextAction [FunctionExpr [TextJoinFunct [StringConst [Setting pitch to], Var [pitch]]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+AktionStmt [SayTextAction [StringConst [Text sample with variable speed and pitch], Var [speed], Var [pitch]]]
+)
+Var [pitch] := NumConst [0]
+
+)
+SayTextAction [StringConst [Speech test complete], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]

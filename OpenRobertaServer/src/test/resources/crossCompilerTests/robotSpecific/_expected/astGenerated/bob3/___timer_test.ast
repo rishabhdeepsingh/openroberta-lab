@@ -1,0 +1,16 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [LedOnAction [ ColorConst [#FF0000] ]]
+AktionStmt [LedOnAction [ ColorConst [#FF0000] ]]
+SensorStmt TimerSensor [1, RESET, NO_SLOT]
+(repeat [FOREVER, BoolConst [true]]WaitTimeStmt [time=NumConst [500]]
+if Binary [GTE, SensorExpr [TimerSensor [1, VALUE, EMPTY_SLOT]], NumConst [4000]]
+,then
+AktionStmt [LedOnAction [ ColorConst [#55ff99] ]]
+AktionStmt [LedOnAction [ ColorConst [#00ff00] ]]
+StmtFlowCon [BREAK]
+,else
+StmtFlowCon [CONTINUE]
+
+)WaitTimeStmt [time=NumConst [2000]]
+)

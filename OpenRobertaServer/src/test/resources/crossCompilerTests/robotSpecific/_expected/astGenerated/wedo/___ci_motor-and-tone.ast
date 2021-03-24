@@ -1,0 +1,8 @@
+MotorOnAction [m, MotionParam [speed=NumConst [30], duration=MotorDuration [type=null, value=NumConst [180]]]]
+MotorOnAction [m, MotionParam [speed=NumConst [30], duration=null]]
+WaitTimeStmt [time=NumConst [70]]
+MotorStop [port=m]
+ToneAction [NumConst [300], NumConst [200]]
+PlayNoteAction [ duration=2000, frequency=261.626]
+WaitTimeStmt [time=NumConst [70]]
+ShowTextAction [StringConst [done], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]

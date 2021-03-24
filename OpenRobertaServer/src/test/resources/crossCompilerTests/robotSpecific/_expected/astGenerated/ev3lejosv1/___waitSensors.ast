@@ -1,0 +1,34 @@
+PlayNoteAction [ duration=500, frequency=261.626]
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [10], NumConst [1]]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [1, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [4, DISTANCE, EMPTY_SLOT]]], NumConst [30]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [UltrasonicSensor [4, PRESENCE, EMPTY_SLOT]]], BoolConst [true]]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [ColorSensor [3, COLOUR, EMPTY_SLOT]]], ColorConst [#b30006]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [ColorSensor [3, LIGHT, EMPTY_SLOT]]], NumConst [50]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [ColorSensor [3, AMBIENTLIGHT, EMPTY_SLOT]]], NumConst [50]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [EncoderSensor [B, ROTATION, EMPTY_SLOT]]], NumConst [2]]]
+SensorStmt EncoderSensor [B, RESET, NO_SLOT]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [EncoderSensor [B, DEGREE, EMPTY_SLOT]]], NumConst [180]]]
+SensorStmt EncoderSensor [B, RESET, NO_SLOT]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [DOWN, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [2, ANGLE, EMPTY_SLOT]]], NumConst [90]]]
+SensorStmt GyroSensor [2, RESET, NO_SLOT]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [2, RATE, EMPTY_SLOT]]], NumConst [90]]]
+SensorStmt GyroSensor [2, RESET, NO_SLOT]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]], NumConst [50000]]]
+SensorStmt TimerSensor [1, RESET, NO_SLOT]
+)]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=130.813]]
+)

@@ -1,0 +1,27 @@
+PlayNoteAction [ duration=500, frequency=261.626]
+MotorOnAction [B, MotionParam [speed=NumConst [3], duration=null]]
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [10], NumConst [1]]
+AktionStmt [ShowTextAction [SensorExpr [TouchSensor [1, PRESSED, EMPTY_SLOT]], NumConst [0], NumConst [0]]]
+AktionStmt [ShowTextAction [SensorExpr [UltrasonicSensor [4, DISTANCE, EMPTY_SLOT]], NumConst [10], NumConst [0]]]
+AktionStmt [ShowTextAction [SensorExpr [UltrasonicSensor [4, PRESENCE, EMPTY_SLOT]], NumConst [0], NumConst [1]]]
+AktionStmt [ShowTextAction [SensorExpr [ColorSensor [3, COLOUR, EMPTY_SLOT]], NumConst [10], NumConst [1]]]
+AktionStmt [ShowTextAction [SensorExpr [ColorSensor [3, LIGHT, EMPTY_SLOT]], NumConst [0], NumConst [2]]]
+AktionStmt [ShowTextAction [SensorExpr [ColorSensor [3, RGB, EMPTY_SLOT]], NumConst [10], NumConst [2]]]
+AktionStmt [ShowTextAction [SensorExpr [ColorSensor [3, AMBIENTLIGHT, EMPTY_SLOT]], NumConst [0], NumConst [3]]]
+AktionStmt [ShowTextAction [SensorExpr [EncoderSensor [B, ROTATION, EMPTY_SLOT]], NumConst [0], NumConst [3]]]
+AktionStmt [ShowTextAction [SensorExpr [EncoderSensor [B, DEGREE, EMPTY_SLOT]], NumConst [10], NumConst [3]]]
+AktionStmt [ShowTextAction [SensorExpr [EncoderSensor [B, DISTANCE, EMPTY_SLOT]], NumConst [0], NumConst [4]]]
+SensorStmt EncoderSensor [B, RESET, NO_SLOT]
+AktionStmt [ShowTextAction [SensorExpr [KeysSensor [DOWN, PRESSED, EMPTY_SLOT]], NumConst [10], NumConst [4]]]
+AktionStmt [ShowTextAction [SensorExpr [GyroSensor [2, ANGLE, EMPTY_SLOT]], NumConst [0], NumConst [5]]]
+AktionStmt [ShowTextAction [SensorExpr [GyroSensor [2, RATE, EMPTY_SLOT]], NumConst [10], NumConst [5]]]
+SensorStmt GyroSensor [2, RESET, NO_SLOT]
+AktionStmt [ShowTextAction [SensorExpr [TimerSensor [3, VALUE, EMPTY_SLOT]], NumConst [0], NumConst [6]]]
+SensorStmt TimerSensor [3, RESET, NO_SLOT]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [1, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [1, PRESSED, EMPTY_SLOT]]], BoolConst [false]]]
+)]
+AktionStmt [ClearDisplayAction []]
+)

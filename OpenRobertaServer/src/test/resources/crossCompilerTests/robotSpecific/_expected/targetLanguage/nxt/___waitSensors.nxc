@@ -1,0 +1,60 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+byte volume = 0x02;
+task main() {
+    SetSensor(S1, SENSOR_TOUCH);
+    SetSensor(S2, SENSOR_SOUND);
+    SetSensor(S3, SENSOR_LIGHT);
+    SetSensor(S3, SENSOR_LIGHT);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    while (true) {
+        if ( Sensor(S1) == true ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        if ( Sensor(S2) > 50 ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        if ( _readLightSensor(S3, 1) < 50 ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        if ( _readLightSensor(S3, 2) < 50 ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        if ( SensorUS(S4) < 30 ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        if ( MotorTachoCount(OUT_B) > 180 ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        if ( ButtonPressed(BTNCENTER, false) == true ) {
+            PlayToneEx(261.626, 2000, volume, false);
+            Wait(2000);
+            break;
+        }
+        Wait(15);
+    }
+}

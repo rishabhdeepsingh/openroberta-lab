@@ -1,0 +1,4 @@
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [InfraredSensor [ir, DISTANCE, EMPTY_SLOT]], NumConst [8]]]
+)]
+LightAction [led, DEFAULT, DEFAULT, ColorConst [#ff0000]]

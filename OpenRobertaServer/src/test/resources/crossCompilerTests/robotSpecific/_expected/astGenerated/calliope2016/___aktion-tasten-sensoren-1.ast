@@ -1,0 +1,3 @@
+MethodCall [aktionKontrolle, , , VOID]
+MethodCall [tastenKontrolle, , , VOID]
+MethodCall [sensoren, , , VOID]

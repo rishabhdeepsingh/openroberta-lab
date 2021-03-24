@@ -1,0 +1,177 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "start:"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "text",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " eight"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "eight",
+    "type": "STRING"
+  },
+  {
+    "opc": "comment",
+    "value": "String Concat -- Start --"
+  },
+  {
+    "opc": "expr",
+    "name": "text",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " one"
+  },
+  {
+    "opc": "textAppend",
+    "name": "text"
+  },
+  {
+    "opc": "expr",
+    "name": "text",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " two"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " three"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "textAppend",
+    "name": "text"
+  },
+  {
+    "opc": "expr",
+    "name": "text",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "textAppend",
+    "name": "text"
+  },
+  {
+    "opc": "expr",
+    "name": "text",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " seven"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "textAppend",
+    "name": "text"
+  },
+  {
+    "opc": "expr",
+    "name": "text",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "eight",
+    "expr": "Var"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " nine"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "text"
+  },
+  {
+    "opc": "expr",
+    "name": "text",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "ten"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " eleven"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": " twelve"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "text"
+  },
+  {
+    "opc": "comment",
+    "value": "String Concat -- End --"
+  },
+  {"opc": "stop"}
+]}

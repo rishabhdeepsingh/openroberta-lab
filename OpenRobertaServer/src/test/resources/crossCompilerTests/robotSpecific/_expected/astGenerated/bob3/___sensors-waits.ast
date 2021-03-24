@@ -1,0 +1,30 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [LedOnAction [ ColorConst [#0000ff] ]]
+AktionStmt [LedOnAction [ ColorConst [#FF0000] ]]
+SensorStmt TimerSensor [1, RESET, NO_SLOT]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [1, PRESSED, 0]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [1, PRESSED, 3]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [1, PRESSED, 2]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [1, PRESSED, 1]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [2, PRESSED, 0]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [2, PRESSED, 3]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [2, PRESSED, 2]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [PinTouchSensor [2, PRESSED, 1]]], BoolConst [true]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [NO_PORT, AMBIENTLIGHT, EMPTY_SLOT]]], NumConst [30]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [InfraredSensor [NO_PORT, REFLEXION, EMPTY_SLOT]]], NumConst [30]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [TemperatureSensor [NO_PORT, TEMPERATURE, EMPTY_SLOT]]], NumConst [20]]]
+)]WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]], NumConst [500]]]
+)]
+)

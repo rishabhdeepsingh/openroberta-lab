@@ -1,0 +1,7 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [LightAction [R, DEFAULT, DEFAULT, Var [red]]]WaitTimeStmt [time=NumConst [500]]
+AktionStmt [LightAction [R, DEFAULT, DEFAULT, Var [green]]]WaitTimeStmt [time=NumConst [500]]
+AktionStmt [LightAction [R, DEFAULT, DEFAULT, Var [blue]]]WaitTimeStmt [time=NumConst [500]]
+AktionStmt [LightAction [R, DEFAULT, DEFAULT, Var [green]]]WaitTimeStmt [time=NumConst [500]]
+)

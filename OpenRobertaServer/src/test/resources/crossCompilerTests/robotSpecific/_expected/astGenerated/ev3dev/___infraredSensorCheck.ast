@@ -1,0 +1,14 @@
+PlayNoteAction [ duration=2000, frequency=261.626]
+MotorOnAction [B, MotionParam [speed=NumConst [30], duration=null]]
+
+(repeat [TIMES, Var [k0], NumConst [0], NumConst [10], NumConst [1]]
+AktionStmt [ShowTextAction [SensorExpr [InfraredSensor [4, DISTANCE, EMPTY_SLOT]], NumConst [0], NumConst [1]]]
+AktionStmt [ShowTextAction [SensorExpr [InfraredSensor [4, PRESENCE, EMPTY_SLOT]], NumConst [0], NumConst [2]]]
+AktionStmt [ShowTextAction [SensorExpr [IRSeekerSensor [1, MODULATED, EMPTY_SLOT]], NumConst [0], NumConst [3]]]
+AktionStmt [ShowTextAction [SensorExpr [IRSeekerSensor [1, UNMODULATED, EMPTY_SLOT]], NumConst [0], NumConst [4]]]
+AktionStmt [ClearDisplayAction []]WaitTimeStmt [time=NumConst [500]]
+AktionStmt [ShowTextAction [Var [item], NumConst [0], NumConst [1]]]
+AktionStmt [ShowTextAction [Var [item2], NumConst [0], NumConst [2]]]
+AktionStmt [ShowTextAction [Var [item3], NumConst [0], NumConst [3]]]
+AktionStmt [ShowTextAction [Var [item4], NumConst [0], NumConst [4]]]
+)

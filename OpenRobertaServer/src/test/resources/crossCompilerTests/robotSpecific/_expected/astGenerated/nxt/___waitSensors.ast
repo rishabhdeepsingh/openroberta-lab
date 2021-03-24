@@ -1,0 +1,22 @@
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [1, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [SoundSensor [2, SOUND, EMPTY_SLOT]]], NumConst [50]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [3, LIGHT, EMPTY_SLOT]]], NumConst [50]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [LightSensor [3, AMBIENTLIGHT, EMPTY_SLOT]]], NumConst [50]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [4, DISTANCE, EMPTY_SLOT]]], NumConst [30]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [EncoderSensor [B, DEGREE, EMPTY_SLOT]]], NumConst [180]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [ENTER, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]
+AktionStmt [PlayNoteAction [ duration=2000, frequency=261.626]]
+)]

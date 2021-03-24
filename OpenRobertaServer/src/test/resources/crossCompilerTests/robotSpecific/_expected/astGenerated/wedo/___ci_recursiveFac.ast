@@ -1,0 +1,2 @@
+ShowTextAction [MethodExpr [MethodCall [fac, Var [n], Binary [ADD, Var [fuenf], NumConst [1]], NUMBER]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]
+ShowTextAction [Var [fuenf], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]

@@ -1,0 +1,29 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+AktionStmt [LedOnAction [ ColorConst [#0000ff] ]]
+AktionStmt [LedOnAction [ ColorConst [#FF0000] ]]WaitTimeStmt [time=NumConst [1000]]
+Var [b] := SensorExpr [PinTouchSensor [2, PRESSED, 1]]
+
+Var [b] := SensorExpr [PinTouchSensor [2, PRESSED, 2]]
+
+Var [b] := SensorExpr [PinTouchSensor [2, PRESSED, 3]]
+
+Var [b] := SensorExpr [PinTouchSensor [2, PRESSED, 0]]
+
+Var [b] := SensorExpr [PinTouchSensor [1, PRESSED, 1]]
+
+Var [b] := SensorExpr [PinTouchSensor [1, PRESSED, 2]]
+
+Var [b] := SensorExpr [PinTouchSensor [1, PRESSED, 3]]
+
+Var [b] := SensorExpr [PinTouchSensor [1, PRESSED, 0]]
+
+Var [c] := SensorExpr [GetSampleSensor [LightSensor [NO_PORT, AMBIENTLIGHT, EMPTY_SLOT]]]
+
+Var [c] := SensorExpr [GetSampleSensor [InfraredSensor [NO_PORT, REFLEXION, EMPTY_SLOT]]]
+
+Var [c] := SensorExpr [GetSampleSensor [TemperatureSensor [NO_PORT, TEMPERATURE, EMPTY_SLOT]]]
+
+Var [c] := SensorExpr [AmbientLightSensor []]
+
+)

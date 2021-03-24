@@ -1,0 +1,4 @@
+
+Var [x] := Binary [ADD, Binary [MINUS, Binary [MULTIPLY, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst [2], NumConst [5]]], NumConst [4]], NumConst [3]], NumConst [2]], NumConst [1]]
+
+ShowTextAction [FunctionExpr [TextJoinFunct [StringConst [erwartet: 23, erhalten:], Var [x]]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]

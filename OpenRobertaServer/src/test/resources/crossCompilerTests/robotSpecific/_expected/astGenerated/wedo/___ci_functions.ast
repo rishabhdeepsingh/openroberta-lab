@@ -1,0 +1,16 @@
+MethodCall [repX, Var [x1], NumConst [10], VOID]
+
+Var [result] := MethodExpr [MethodCall [retX, Var [x2], NumConst [9], NUMBER]]
+
+
+Var [whole] := Binary [ADD, Var [sum], Var [result]]
+
+
+StmtTextComment [whole sollte 30 sein]
+
+if Binary [EQ, Var [whole], NumConst [30]]
+,then
+AktionStmt [ShowTextAction [StringConst [ok], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+,else
+AktionStmt [ShowTextAction [FunctionExpr [TextJoinFunct [StringConst [***** error ***** expected 30 got], Var [whole]]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]
+
