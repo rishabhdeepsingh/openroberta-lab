@@ -19,15 +19,14 @@ var driveConfig = {
     "motorR": { "port": 2, "orientation": -1 },
     "wheelDiameter": 5.6, "trackWidth": 22.8
 };
-var propFromORB = {
-    "Motor": [{ "pwr": 0, "speed": 0, "pos": 0 },
+var propFromORB = { "Motor": [{ "pwr": 0, "speed": 0, "pos": 0 },
         { "pwr": 0, "speed": 0, "pos": 0 },
         { "pwr": 0, "speed": 0, "pos": 0 },
         { "pwr": 0, "speed": 0, "pos": 0 }],
-    "Sensor": [{ "valid": false, "value": 0, "analog": [0, 0], "digital": [true, true] },
-        { "valid": false, "value": 0, "analog": [0, 0], "digital": [true, true] },
-        { "valid": false, "value": 0, "analog": [0, 0], "digital": [true, true] },
-        { "valid": false, "value": 0, "analog": [0, 0], "digital": [true, true] }],
+    "Sensor": [{ "valid": false, "type": 0, "option": 0, "value": [0, 0] },
+        { "valid": false, "type": 0, "option": 0, "value": [0, 0] },
+        { "valid": false, "type": 0, "option": 0, "value": [0, 0] },
+        { "valid": false, "type": 0, "option": 0, "value": [0, 0] }],
     "Vcc": 0,
     "Digital": [false, false],
     "Status": 0
@@ -73,35 +72,51 @@ function configSensor(id, type, mode, option) {
 function getSensorValue(id) {
     id = id - 1;
     if (0 <= id && id < 4) {
-        return (propFromORB.Sensor[id].value);
+        return (propFromORB.Sensor[id].value[0]);
     }
     return (0);
 }
+/*
+function getSensorValue(id, type) {
+    id = id - 1;
+    if (0 <= id && id < 4) {
+        if (dataValid(propFromORB.Sensor[id].valid, type, propFromORB.Sensor[id].type) == true){
+            return (propFromORB.Sensor[id].value[0]);
+        }
+        else if (dataValid(propFromORB.Sensor[id].valid, type, propFromORB.Sensor[id].type) == false){
+            return getSensorValue(id,type);
+        }
+        else{
+            throw new Error("Error");
+        }
+    }
+    return (0);
+}*/
 function getSensorValueColor(id) {
     id = id - 1;
     if (0 <= id && id < 4) {
-        if (propFromORB.Sensor[id].value == 0) {
+        if (propFromORB.Sensor[id].value[0] == 0) {
             return ("No Color");
         }
-        if (propFromORB.Sensor[id].value == 1) {
+        if (propFromORB.Sensor[id].value[0] == 1) {
             return ("Black");
         }
-        if (propFromORB.Sensor[id].value == 2) {
+        if (propFromORB.Sensor[id].value[0] == 2) {
             return ("Blue");
         }
-        if (propFromORB.Sensor[id].value == 3) {
+        if (propFromORB.Sensor[id].value[0] == 3) {
             return ("Green");
         }
-        if (propFromORB.Sensor[id].value == 4) {
+        if (propFromORB.Sensor[id].value[0] == 4) {
             return ("Yellow");
         }
-        if (propFromORB.Sensor[id].value == 5) {
+        if (propFromORB.Sensor[id].value[0] == 5) {
             return ("Red");
         }
-        if (propFromORB.Sensor[id].value == 6) {
+        if (propFromORB.Sensor[id].value[0] == 6) {
             return ("White");
         }
-        if (propFromORB.Sensor[id].value == 7) {
+        if (propFromORB.Sensor[id].value[0] == 7) {
             return ("Brown");
         }
     }
@@ -110,43 +125,22 @@ function getSensorValueColor(id) {
 function getSensorValueUltrasonic(id) {
     id = id - 1;
     if (0 <= id && id < 4) {
-        return (propFromORB.Sensor[id].value / 10);
+        return (propFromORB.Sensor[id].value[0] / 10);
     }
     return (0);
 }
 function getSensorValueGyro(id) {
     id = id - 1;
     if (0 <= id && id < 4) {
-        if (propFromORB.Sensor[id].value <= 32767) {
+        if (propFromORB.Sensor[id].value[0] <= 32767) {
             return (propFromORB.Sensor[id].value);
         }
         else {
-            propFromORB.Sensor[id].value = propFromORB.Sensor[id].value - 65536;
+            propFromORB.Sensor[id].value[0] = propFromORB.Sensor[id].value[0] - 65536;
             return (propFromORB.Sensor[id].value);
         }
     }
     return (0);
-}
-function getSensorAnalog(id, ch) {
-    id = id - 1;
-    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {
-        return (propFromORB.Sensor[id].analog[ch]);
-    }
-    return (0);
-}
-function getSensorDigital(id, ch) {
-    id = id - 1;
-    if (0 <= id && id < 4 && 0 <= ch && ch < 2) {
-        return (propFromORB.Sensor[id].digital[ch]);
-    }
-    return (false);
-}
-function getDigital(id) {
-    id = id - 1;
-    if (0 <= id && id < 2) {
-        return (propFromORB.Digital[id]);
-    }
-    return (false);
 }
 function setMotor(id, mode, speed, pos) {
     id = id - 1;
@@ -405,21 +399,18 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 }
             }
             else if (sensor == "touch") {
-                //NXT-Touch-Sensor
-                configSensor(port, 3, 0, 0);
-                s.push(getSensorAnalog(port, 0));
+                configSensor(port, 4, 0, 0);
+                s.push(getSensorValue(port));
             }
             else if (sensor == "gyro") {
                 if (slot == "angle") {
                     configSensor(port, 1, 0, 0);
                     this.btInterfaceFct(cmdConfigToORB);
-                    s.push(getSensorValueGyro(port));
+                    s.push(getSensorValue(port));
                 }
                 if (slot == "rate") {
-                    if ((cmdConfigToORB.configToORB.Sensor[port].type != 1) || (cmdConfigToORB.configToORB.Sensor[port].mode != 1)) { //Fuer alle Sensoren machen
-                        configSensor(port, 1, 1, 0);
-                        this.btInterfaceFct(cmdConfigToORB);
-                    }
+                    configSensor(port, 1, 1, 0);
+                    this.btInterfaceFct(cmdConfigToORB);
                     s.push(getSensorValueGyro(port));
                 }
             }
