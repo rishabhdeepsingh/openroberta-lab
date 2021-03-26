@@ -87,10 +87,4 @@ public class TestResourceCompleteTest {
     public void toolBoxBlockIsPresentInTestResources() {
         Assertions.assertThat(presentBlockTypes).contains(block);
     }
-
-    public static class CompletionInformation {
-        public String robotName;
-        public String toolbox;
-        public String block;
-    }
 }
